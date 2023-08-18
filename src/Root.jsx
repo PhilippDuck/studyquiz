@@ -89,7 +89,7 @@ function Root() {
         </Flex>
       </Box>
 
-      <Container>
+      <Container maxW={"2xl"}>
       <Box h="20px"></Box>
       <Outlet />
       </Container>

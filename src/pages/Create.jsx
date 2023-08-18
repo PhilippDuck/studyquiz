@@ -202,9 +202,9 @@ function Create() {
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
-      <Modal  isCentered isOpen={importModalDisclosure.isOpen} onClose={importModalDisclosure.onClose}>
+      <Modal isCentered isOpen={importModalDisclosure.isOpen} onClose={importModalDisclosure.onClose}>
         <ModalOverlay />
-        <ModalContent  >
+        <ModalContent maxW="xl"  >
           <ModalHeader>Fragen als JSON Text importieren</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
