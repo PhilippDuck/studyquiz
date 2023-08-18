@@ -1,44 +1,73 @@
 import React from 'react'
+import { QuestionIcon, WarningIcon, CheckCircleIcon } from "@chakra-ui/icons";
 import {
 
-    Text,
+  Text,
+  VStack,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Card,
+  CardHeader,
+  CardBody,
+  CardFooter,
+  Heading,
+  Box,
+  List,
+  ListItem,
+  ListIcon,
+  OrderedList,
+  UnorderedList,
+  Highlight,
+  Flex,
+  Center,
+  Spacer
 
-    Accordion,
-    AccordionItem,
-    AccordionButton,
-    AccordionPanel,
-    AccordionIcon,
-    Card,
-    CardHeader,
-    CardBody,
-    CardFooter,
-  } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 
-function QuestionCard() {
+function QuestionCard(props) {
   return (
-    <Card w="100%">
-    <CardBody>
-      <Accordion allowMultiple>
-        <AccordionItem border="none">
-          <AccordionButton>
-            <Text size="xs">
-              Was ist der Unterschied zwischen RAM und ROM?
-            </Text>
-            <AccordionIcon />
-          </AccordionButton>
+    <Card w="100%" >
+      <CardBody>
+        <Accordion allowMultiple>
+          <AccordionItem border="none">
+            <AccordionButton >
+              <Flex w="100%">
+              <Text size="sm" align="start">
+                {props.question.question}
+              </Text>
+              <Spacer></Spacer>
+              <AccordionIcon />
+              </Flex>
+            </AccordionButton>
 
-          <AccordionPanel pb={4}>
-            <ul>
-              <li>1. Test</li>
-              <li>2. Test</li>
-              <li>3. Test</li>
-              <li>4. Test</li>
-            </ul>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
-    </CardBody>
-  </Card>
+            <AccordionPanel pb={4}>
+              <VStack align={"start"} >
+
+                <Heading size={"xs"}>Antworten:</Heading>
+                <OrderedList>
+                  {props.question.answers.map((q, i) => {
+
+                    if (i == props.question.rightAnswer) {
+                      return <Flex><ListItem key={i}>{q}</ListItem> <Box w="5px"></Box><Center><CheckCircleIcon color={"green.300"}></CheckCircleIcon></Center></Flex>
+                    } else {
+                      return <Flex><ListItem key={i}>{q}</ListItem><Box w="5px"></Box><Center><WarningIcon color={"red.300"}></WarningIcon></Center></Flex>
+                    }
+
+                  })}
+                </OrderedList>
+
+
+                <Heading size={"xs"}>Hinweis:</Heading>
+                <Text>{props.question.hint}</Text>
+              </VStack>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
+      </CardBody>
+    </Card>
   )
 }
 

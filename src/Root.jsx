@@ -31,6 +31,7 @@ import {
   MenuGroup,
   MenuOptionGroup,
   MenuDivider,
+  useMediaQuery 
 } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
 
@@ -43,34 +44,13 @@ function Root() {
     const [currentQuestion, setCurrentQuestion] = useState(0);
     const numberOfQuestions = questions.length;
     const [mistakeCounter, setMistakeCounter] = useState(0);
+    const [isNotSmallerScreen, isLargerScreen] = useMediaQuery([
+      "(min-width: 600px)",
+      "(min-width: 900px)"
+    ]);
   
-    function checkAnswer(answer) {
-      //console.log(answer);
-      if (answer === questions[currentQuestion].rightAnswer) {
-        toast({
-          title: "Richtig!",
-          status: "success",
-          duration: 700,
-        });
-        if (currentQuestion === numberOfQuestions - 1) {
-          setQuizIsDone(true);
-        }
-        setCurrentQuestion(currentQuestion + 1);
-      } else {
-        toast({
-          title: "Falsch!",
-          status: "error",
-          duration: 700,
-        });
-        setMistakeCounter(mistakeCounter + 1);
-      }
-    }
+
   
-    function repeatQuiz() {
-      setCurrentQuestion(0);
-      setQuizIsDone(false);
-      setMistakeCounter(0);
-    }
   return (
     <>
       <Box shadow="xs" w="100%" h="80px" p={4}>
@@ -78,9 +58,13 @@ function Root() {
           <Center>
             <Box w="100px">
               <Menu>
+                {isLargerScreen || isNotSmallerScreen ?
                 <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                  Menü
-                </MenuButton>
+                Menü
+                </MenuButton>:<MenuButton as={Button} >
+                <ChevronDownIcon />
+                </MenuButton>}
+                
                 <MenuList>
                 <Link to={`play/`}><MenuItem>Spielen</MenuItem></Link>
                   <MenuItem>Ranglisten</MenuItem>
