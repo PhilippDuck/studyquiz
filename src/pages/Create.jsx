@@ -158,7 +158,7 @@ function Create() {
             <VStack>
               <Box h="20px"></Box>
               <FormControl isRequired>
-                <FormLabel>Fragentitel:</FormLabel>
+                <FormLabel>Frage:</FormLabel>
                 <Input onChange={(e) => { newQuestion.question = e.target.value }} placeholder="Frage ..." />
               </FormControl>
               <Box h="20px"></Box>

@@ -6,9 +6,12 @@ import "./index.css";
 import Create from "./pages/Create";
 import Play from "./pages/Play.jsx";
 import Root from "./Root.jsx";
+import Quizzes from "./pages/Quizzes";
+import { RealmProvider } from "./provider/RealmProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <RealmProvider>
     <ChakraProvider>
       <ColorModeScript />
       <Router>
@@ -17,9 +20,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route index element={<Navigate to="/play" replace />} />
             <Route path="play" element={<Play />} />
             <Route path="create" element={<Create />} />
+            <Route path="quizList" element={<Quizzes />} />
           </Route>
         </Routes>
       </Router>
     </ChakraProvider>
+    </RealmProvider>
   </React.StrictMode>
 );

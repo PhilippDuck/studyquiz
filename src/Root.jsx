@@ -1,56 +1,67 @@
-import React from 'react'
-import { useState } from "react";
-import { Heading } from "@chakra-ui/react";
-import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
-import { Stack, HStack, VStack } from "@chakra-ui/react";
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Outlet, Link } from "react-router-dom";
 import {
-  ChevronDownIcon,
-  MoonIcon,
-  SunIcon,
-  QuestionIcon,
-  RepeatIcon,
-} from "@chakra-ui/icons";
-import { Center, Square, Circle } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { IconButton } from "@chakra-ui/react";
-import { Container } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Progress } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
-import { questions } from "./assets/questions";
-
-import Question from "./components/Question";
-
-import {
+  Heading,
+  useColorMode,
+  Button,
+  ButtonGroup,
+  Center,
+  Square,
+  Circle,
+  Flex,
+  Spacer,
+  IconButton,
+  Container,
   Menu,
   MenuButton,
   MenuList,
   MenuItem,
-  MenuItemOption,
-  MenuGroup,
-  MenuOptionGroup,
-  MenuDivider,
-  useMediaQuery 
+  useMediaQuery,
+  Box
 } from "@chakra-ui/react";
-import { Box } from "@chakra-ui/react";
+import {
+  ChevronDownIcon,
+  MoonIcon,
+  SunIcon
+} from "@chakra-ui/icons";
+import { App, Credentials } from "realm-web";
+import { useRealm } from "./provider/RealmProvider";
+
+
 
 
 function Root() {
+  const app = useRealm();
+  useEffect(() => {
+    const callRealmFunction = async () => {
+      // Anonym anmelden
+      const credentials = Credentials.anonymous();
+      if (app.currentUser) {
+        console.log(" bereits eingeloggt. " + app.currentUser.id)
+      } else {
+        try {
+          const user = await app.logIn(credentials);
+          console.log('Erfolgreich anonym angemeldet als', user.id);
 
-    const toast = useToast();
-    const { colorMode, toggleColorMode } = useColorMode();
-    const [quizIsDone, setQuizIsDone] = useState(false);
-    const [currentQuestion, setCurrentQuestion] = useState(0);
-    const numberOfQuestions = questions.length;
-    const [mistakeCounter, setMistakeCounter] = useState(0);
-    const [isNotSmallerScreen, isLargerScreen] = useMediaQuery([
-      "(min-width: 600px)",
-      "(min-width: 900px)"
-    ]);
-  
+          // Serverfunktion aufrufen
 
-  
+        } catch (err) {
+          console.error('Fehler:', err.message);
+        }
+      }
+    };
+    callRealmFunction();
+  }, []);
+
+
+
+  const { colorMode, toggleColorMode } = useColorMode();
+  const [isNotSmallerScreen, isLargerScreen] = useMediaQuery([
+    "(min-width: 600px)",
+    "(min-width: 900px)"
+  ]);
+
+
   return (
     <>
       <Box shadow="xs" w="100%" h="80px" p={4}>
@@ -59,14 +70,15 @@ function Root() {
             <Box w="100px">
               <Menu>
                 {isLargerScreen || isNotSmallerScreen ?
-                <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                Menü
-                </MenuButton>:<MenuButton as={Button} >
-                <ChevronDownIcon />
-                </MenuButton>}
-                
+                  <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
+                    Menü
+                  </MenuButton> : <MenuButton as={Button} >
+                    <ChevronDownIcon />
+                  </MenuButton>}
+
                 <MenuList>
-                <Link to={`play/`}><MenuItem>Spielen</MenuItem></Link>
+                  <Link to={`play/`}><MenuItem>Spielen</MenuItem></Link>
+                  <Link to={`quizList/`}><MenuItem>Quiz Liste</MenuItem></Link>
                   <MenuItem>Ranglisten</MenuItem>
                   <MenuItem>Historie</MenuItem>
                   <Link to={`create/`}><MenuItem>Erstellen</MenuItem></Link>
@@ -76,7 +88,7 @@ function Root() {
             </Box>
           </Center>
           <Center flex={1}>
-          <Link to={`/`}><Heading>StudyQuiz</Heading></Link>
+            <Link to={`/`}><Heading>StudyQuiz</Heading></Link>
           </Center>
           <Flex w="100px">
             <Spacer />
@@ -90,10 +102,10 @@ function Root() {
       </Box>
 
       <Container maxW={"2xl"}>
-      <Box h="20px"></Box>
-      <Outlet />
+        <Box h="20px"></Box>
+        <Outlet />
       </Container>
-      
+
     </>
   )
 }
