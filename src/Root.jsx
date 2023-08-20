@@ -77,12 +77,9 @@ function Root() {
                   </MenuButton>}
 
                 <MenuList>
-                  <Link to={`play/`}><MenuItem>Spielen</MenuItem></Link>
-                  <Link to={`quizList/`}><MenuItem>Quiz Liste</MenuItem></Link>
-                  <MenuItem>Ranglisten</MenuItem>
-                  <MenuItem>Historie</MenuItem>
+                  <Link to={`games/`}><MenuItem>Spielen</MenuItem></Link>
                   <Link to={`create/`}><MenuItem>Erstellen</MenuItem></Link>
-                  <MenuItem>Info</MenuItem>
+                  <Link to={`profile/`}><MenuItem>Profil</MenuItem></Link>
                 </MenuList>
               </Menu>
             </Box>

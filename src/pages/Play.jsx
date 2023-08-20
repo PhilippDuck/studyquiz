@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Heading } from "@chakra-ui/react";
 import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
+import { useLocation, Link } from 'react-router-dom';
 import {
   RepeatIcon,
 } from "@chakra-ui/icons";
@@ -11,11 +12,16 @@ import { Center, Square, Circle } from "@chakra-ui/react";
 import { Text } from "@chakra-ui/react";
 import { Progress } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
-import { questions } from "../assets/questions";
 import Question from "../components/Question";
 import { Box } from "@chakra-ui/react";
 
 function Play() {
+  let questions = []
+  const location = useLocation();
+  if (location.state && location.state.questions) {
+    questions = location.state.questions;
+ }
+ 
   const toast = useToast();
   const { colorMode, toggleColorMode } = useColorMode();
   const [quizIsDone, setQuizIsDone] = useState(false);
@@ -23,7 +29,12 @@ function Play() {
   const numberOfQuestions = questions.length;
   const [mistakeCounter, setMistakeCounter] = useState(0);
 
+  
+
+
+
   function checkAnswer(answer) {
+    
     //console.log(answer);
     if (answer === questions[currentQuestion].rightAnswer) {
       toast({
@@ -70,13 +81,18 @@ function Play() {
           <VStack spacing={10}>
             <Heading>Quiz beendet!</Heading>
             <Text>Du hast {mistakeCounter} Fehler gemacht.</Text>
+            <ButtonGroup>
+            <Link to={"/games"}><Button>Beenden</Button></Link>
+            
+
             <Button
               leftIcon={<RepeatIcon />}
-              colorScheme="blue"
+              colorScheme="teal"
               onClick={repeatQuiz}
             >
               wiederholen
-            </Button>
+            </Button></ButtonGroup>
+            
           </VStack>
         </Center>
       ) : (

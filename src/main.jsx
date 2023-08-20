@@ -7,6 +7,7 @@ import Create from "./pages/Create";
 import Play from "./pages/Play.jsx";
 import Root from "./Root.jsx";
 import Quizzes from "./pages/Quizzes";
+import Profile from "./pages/Profile";
 import { RealmProvider } from "./provider/RealmProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -17,10 +18,11 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Router>
         <Routes>
           <Route path="/" element={<Root />}>
-            <Route index element={<Navigate to="/play" replace />} />
+            <Route index element={<Navigate to="/games" replace />} />
+            <Route path="games" element={<Quizzes />} />
             <Route path="play" element={<Play />} />
             <Route path="create" element={<Create />} />
-            <Route path="quizList" element={<Quizzes />} />
+            <Route path="profile" element={<Profile />} />
           </Route>
         </Routes>
       </Router>
