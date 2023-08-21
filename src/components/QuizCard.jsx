@@ -1,10 +1,12 @@
 import React from 'react'
-import { Card, Heading, CardHeader, CardBody, CardFooter, Button,  VStack, Spacer, Text  } from '@chakra-ui/react'
+import { Card, Heading, CardHeader, CardBody, CardFooter, Button,  VStack, Spacer, Text, Box  } from '@chakra-ui/react'
 import { Link } from "react-router-dom";
 
 function QuizCard(props) {
   return (
-    <Card size="sm" w="100%" direction={{ base: 'column', sm: 'row' }}>
+    <Box w="100%">
+    <Link w="100%" to={"/play"} state={{questions: props.quiz.questions}} >
+    <Card variant={"outline"} _hover={{ border: "1px", cursor: "pointer" }} size="sm" w="100%" direction={{ base: 'column', sm: 'row' }}>
       <VStack align={"start"}>
         <CardHeader>
         <Heading size="sm">{props.quiz.title}</Heading>
@@ -14,12 +16,12 @@ function QuizCard(props) {
         </VStack>
         <Spacer />
         <CardFooter>
-        <Link to={"/play"} state={{questions: props.quiz.questions}} ><Button variant='solid' >
-        spielen
-      </Button></Link>
+        
       
     </CardFooter>
     </Card>
+    </Link>
+    </Box>
   )
 }
 

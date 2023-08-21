@@ -1,4 +1,4 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from "react";
 import { Outlet, Link } from "react-router-dom";
 import {
   Heading,
@@ -17,50 +17,51 @@ import {
   MenuList,
   MenuItem,
   useMediaQuery,
-  Box
+  Box,
+  Spinner,
 } from "@chakra-ui/react";
-import {
-  ChevronDownIcon,
-  MoonIcon,
-  SunIcon
-} from "@chakra-ui/icons";
+import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { App, Credentials } from "realm-web";
 import { useRealm } from "./provider/RealmProvider";
 
-
-
-
 function Root() {
   const app = useRealm();
+
+  const [isLogged, setIsLogged] = useState(false);
+
   useEffect(() => {
     const callRealmFunction = async () => {
       // Anonym anmelden
       const credentials = Credentials.anonymous();
       if (app.currentUser) {
-        console.log(" bereits eingeloggt. " + app.currentUser.id)
+        try {
+          await app.currentUser.refreshAccessToken();
+          console.log(" bereits eingeloggt. " + app.currentUser.id);
+          setIsLogged(true);
+        } catch (error) {
+          console.log("Fehler beim refresh: " + error)
+          localStorage.clear();
+          callRealmFunction();
+        }
       } else {
         try {
           const user = await app.logIn(credentials);
-          console.log('Erfolgreich anonym angemeldet als', user.id);
-
+          console.log("Erfolgreich anonym angemeldet als", user.id);
+          setIsLogged(true);
           // Serverfunktion aufrufen
-
         } catch (err) {
-          console.error('Fehler:', err.message);
+          console.error("Fehler:", err.message);
         }
       }
     };
     callRealmFunction();
   }, []);
 
-
-
   const { colorMode, toggleColorMode } = useColorMode();
   const [isNotSmallerScreen, isLargerScreen] = useMediaQuery([
     "(min-width: 600px)",
-    "(min-width: 900px)"
+    "(min-width: 900px)",
   ]);
-
 
   return (
     <>
@@ -69,23 +70,34 @@ function Root() {
           <Center>
             <Box w="100px">
               <Menu>
-                {isLargerScreen || isNotSmallerScreen ?
+                {isLargerScreen || isNotSmallerScreen ? (
                   <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
                     Menü
-                  </MenuButton> : <MenuButton as={Button} >
+                  </MenuButton>
+                ) : (
+                  <MenuButton as={Button}>
                     <ChevronDownIcon />
-                  </MenuButton>}
+                  </MenuButton>
+                )}
 
                 <MenuList>
-                  <Link to={`games/`}><MenuItem>Spielen</MenuItem></Link>
-                  <Link to={`create/`}><MenuItem>Erstellen</MenuItem></Link>
-                  <Link to={`profile/`}><MenuItem>Profil</MenuItem></Link>
+                  <Link to={`games/`}>
+                    <MenuItem>Spielen</MenuItem>
+                  </Link>
+                  <Link to={`create/`}>
+                    <MenuItem>Erstellen</MenuItem>
+                  </Link>
+                  <Link to={`profile/`}>
+                    <MenuItem>Profil</MenuItem>
+                  </Link>
                 </MenuList>
               </Menu>
             </Box>
           </Center>
           <Center flex={1}>
-            <Link to={`/`}><Heading>StudyQuiz</Heading></Link>
+            <Link to={`/`}>
+              <Heading>StudyQuiz</Heading>
+            </Link>
           </Center>
           <Flex w="100px">
             <Spacer />
@@ -100,11 +112,16 @@ function Root() {
 
       <Container maxW={"2xl"}>
         <Box h="20px"></Box>
-        <Outlet />
+        {isLogged ? (
+          <Outlet />
+        ) : (
+          <Center w={"100%"} h="300px">
+            <Spinner size="xl" />
+          </Center>
+        )}
       </Container>
-
     </>
-  )
+  );
 }
 
-export default Root
+export default Root;

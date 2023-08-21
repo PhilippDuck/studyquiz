@@ -4,22 +4,28 @@ import { useEffect, useState } from 'react';
 import { Heading, Spinner, VStack, Box, Center, Button, Flex, Spacer } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons'
 import QuizCard from '../components/QuizCard';
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 
-function Quizzes() {
+function Quizzes(props) {
 
   const app = useRealm();
   const [quizzes, setQuizzes] = useState();
+ 
 
-  useEffect(() => {
+   useEffect(() => {
     async function getQuizzes() {
-      const result = await app.currentUser.functions.getQuizzes(); // Ersetzen Sie 'IhreFunktionName' durch den Namen Ihrer Funktion
-      console.log('Ergebnis der Funktion:', result);
-      setQuizzes(result);
+      if (app.currentUser) {
+        const result = await app.currentUser.functions.getQuizzes(); // Ersetzen Sie 'IhreFunktionName' durch den Namen Ihrer Funktion
+        console.log('Ergebnis der Funktion:', result);
+        setQuizzes(result);
+      } else {
+        console.log("nicht eingeloggt");
+      }
+      
     }
     getQuizzes();
-  }, [])
+  }, []) 
 
 
   return (
