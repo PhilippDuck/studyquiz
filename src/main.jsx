@@ -8,6 +8,7 @@ import Play from "./pages/Play.jsx";
 import Root from "./Root.jsx";
 import Quizzes from "./pages/Quizzes";
 import Profile from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 import { RealmProvider } from "./provider/RealmProvider";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="create" element={<Create />} />
             <Route path="profile" element={<Profile />} />
           </Route>
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     </ChakraProvider>
