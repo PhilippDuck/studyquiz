@@ -19,8 +19,11 @@ import {
   useMediaQuery,
   Box,
   Spinner,
+  HStack,
+  Text,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import { LuGamepad2, LuUser } from "react-icons/lu";
 import { App, Credentials } from "realm-web";
 import { useRealm } from "./provider/RealmProvider";
 
@@ -39,7 +42,7 @@ function Root() {
           console.log(" bereits eingeloggt. " + app.currentUser.id);
           setIsLogged(true);
         } catch (error) {
-          console.log("Fehler beim refresh: " + error)
+          console.log("Fehler beim refresh: " + error);
           localStorage.clear();
           callRealmFunction();
         }
@@ -82,13 +85,21 @@ function Root() {
 
                 <MenuList>
                   <Link to={`games/`}>
-                    <MenuItem>Spielen</MenuItem>
+                    <MenuItem>
+                      <HStack>
+                        <LuGamepad2 />
+                        <Text>Spielen</Text>
+                      </HStack>
+                    </MenuItem>
                   </Link>
-                  <Link to={`create/`}>
-                    <MenuItem>Erstellen</MenuItem>
-                  </Link>
+
                   <Link to={`profile/`}>
-                    <MenuItem>Profil</MenuItem>
+                  <MenuItem>
+                    <HStack>
+                      <LuUser />
+                      <Text>Profil</Text>
+                    </HStack>
+                    </MenuItem>
                   </Link>
                 </MenuList>
               </Menu>

@@ -165,7 +165,7 @@ function Create() {
         <Center>
           
             <Button leftIcon={isSaveing ? <Spinner size={"xs"}/> : <MdOutlineSave size={"20px"}/>} onClick={createNewQuiz} colorScheme={"teal"} size={"sm"}>
-              speichern
+              Speichern
             </Button>
           
         </Center>
