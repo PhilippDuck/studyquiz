@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -28,6 +28,38 @@ import {
 
 function Question(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [shuffledArray, setShuffledArray] = useState([]);
+  const [elementToFind, setElementToFind] = useState("");
+  const [newPosition, setNewPosition] = useState(-1);
+
+  useEffect(() => {
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    const originalArray = [...props.questions[props.currentQuestion].answers];
+    const positionOfElementToFind = props.questions[props.currentQuestion]
+      .rightAnswer;
+
+    // Finde das Element an der gegebenen Position im ursprünglichen Array
+    const elementToFind = originalArray[positionOfElementToFind];
+
+    // Erstelle eine Kopie des Arrays und shuffele es
+    const shuffledArray = [...originalArray];
+    shuffleArray(shuffledArray);
+
+    // Finde die neue Position des gesuchten Elements im geschüttelten Array
+    const newPosition = shuffledArray.indexOf(elementToFind);
+
+    setShuffledArray(shuffledArray);
+    setElementToFind(elementToFind);
+    setNewPosition(newPosition);
+  }, [props.currentQuestion]);
+
   return (
     <VStack spacing="40px">
       <Flex w="full">
@@ -50,13 +82,13 @@ function Question(props) {
       </Flex>
 
       <SimpleGrid columns={2} spacing={5} w="100%">
-        {props.questions[props.currentQuestion].answers.map((e, i) => {
+        {shuffledArray.map((e, i) => {
           return (
             <Button
               minH="100px"
               w="full"
               whiteSpace={"normal"}
-              onClick={() => props.checkAnswer(i)}
+              onClick={() => props.checkAnswer(e)}
               key={i}
             >
               {e}

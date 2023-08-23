@@ -72,7 +72,7 @@ function Profile() {
                         <Input onChange={(e) => { newNickname = e.target.value }}></Input>
                     </ModalBody>
                     <ModalFooter>
-                        <Button colorScheme='blue' mr={3} onClick={() => addNicknameToCustomUserData(newNickname)}>
+                        <Button colorScheme='teal' mr={3} onClick={() => addNicknameToCustomUserData(newNickname)}>
                             Speichern
                         </Button>
                     </ModalFooter>

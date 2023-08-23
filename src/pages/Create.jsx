@@ -1,9 +1,9 @@
 import React from "react";
 import { useState } from "react";
-import { QuestionIcon, AddIcon, DownloadIcon } from "@chakra-ui/icons";
+import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import QuestionCard from "../components/QuestionCard";
 import { useRealm } from "../provider/RealmProvider";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { MdOutlineSave } from "react-icons/md";
 import {
   Textarea,
@@ -15,42 +15,23 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
-  Drawer,
-  DrawerBody,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   Input,
   Button,
   Flex,
   Spacer,
-  Select,
   Center,
   Text,
   VStack,
-  HStack,
-  Icon,
   Box,
   Heading,
-  Accordion,
-  AccordionItem,
-  AccordionButton,
-  AccordionPanel,
-  AccordionIcon,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Card,
-  CardHeader,
-  CardBody,
-  CardFooter,
   ButtonGroup,
   useToast,
-  Spinner
+  Spinner,
 } from "@chakra-ui/react";
+import AddQuestionDrawer from "../components/AddQuestionDrawer";
+
 
 function Create() {
   const app = useRealm();
@@ -99,7 +80,7 @@ function Create() {
       newQuiz.questions = questions;
 
       // Check if new Quiz is valid
-      if (newQuiz.title != "" && newQuiz.questions.length > 0){
+      if (newQuiz.title != "" && newQuiz.questions.length > 0) {
         const result = await app.currentUser.functions.createQuiz(
           JSON.stringify(newQuiz)
         );
@@ -119,7 +100,6 @@ function Create() {
           isClosable: true,
         });
       }
-       
     } catch (error) {
       console.log(error);
     }
@@ -127,7 +107,6 @@ function Create() {
   }
 
   function addNewQuestion(question) {
-    onClose();
     setQuestions([...questions, question]);
   }
 
@@ -156,18 +135,26 @@ function Create() {
     }
   }
 
-
   return (
     <>
       <Flex>
         <Heading>Spiel erstellen</Heading>
         <Spacer></Spacer>
         <Center>
-          
-            <Button leftIcon={isSaveing ? <Spinner size={"xs"}/> : <MdOutlineSave size={"20px"}/>} onClick={createNewQuiz} colorScheme={"teal"} size={"sm"}>
-              Speichern
-            </Button>
-          
+          <Button
+            leftIcon={
+              isSaveing ? (
+                <Spinner size={"xs"} />
+              ) : (
+                <MdOutlineSave size={"20px"} />
+              )
+            }
+            onClick={createNewQuiz}
+            colorScheme={"teal"}
+            size={"sm"}
+          >
+            Speichern
+          </Button>
         </Center>
       </Flex>
       <Box h="30px" />
@@ -218,107 +205,14 @@ function Create() {
       </VStack>
       <p>{newQuestion.answers}</p>
       <Box h="10px"></Box>
-      <Drawer
-        colorScheme={"red"}
-        size="sm"
+
+      <AddQuestionDrawer 
+        addNewQuestion={addNewQuestion} 
+        onOpen={onOpen} 
+        onClose={onClose} 
         isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-      >
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerCloseButton />
-          <DrawerHeader>Frage hinzufügen</DrawerHeader>
+      />
 
-          <DrawerBody>
-            <VStack>
-              <Box h="20px"></Box>
-              <FormControl isRequired>
-                <FormLabel>Frage:</FormLabel>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.question = e.target.value;
-                  }}
-                  placeholder="Frage ..."
-                />
-              </FormControl>
-              <Box h="20px"></Box>
-              <FormControl isRequired>
-                <FormLabel>Antwortmöglichkeiten:</FormLabel>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.answers[0] = e.target.value;
-                  }}
-                  placeholder="1. Antwort ..."
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.answers[1] = e.target.value;
-                  }}
-                  placeholder="2. Antwort ..."
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.answers[2] = e.target.value;
-                  }}
-                  placeholder="3. Antwort ..."
-                />
-              </FormControl>
-              <FormControl isRequired>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.answers[3] = e.target.value;
-                  }}
-                  placeholder="4. Antwort ..."
-                />
-              </FormControl>
-              <Box h="20px"></Box>
-              <FormControl isRequired>
-                <FormLabel>Korrekte Antwort:</FormLabel>
-                <Select
-                  onChange={(e) => {
-                    newQuestion.rightAnswer = Number(e.target.value);
-                  }}
-                  placeholder="Richtige Antwort"
-                >
-                  <option value={0}>Antwort 1</option>
-                  <option value={1}>Antwort 2</option>
-                  <option value={2}>Antwort 3</option>
-                  <option value={3}>Antwort 4</option>
-                </Select>
-              </FormControl>
-              <Box h="20px"></Box>
-              <FormControl>
-                <FormLabel>Hinweis:</FormLabel>
-                <Input
-                  onChange={(e) => {
-                    newQuestion.hint = e.target.value;
-                  }}
-                  placeholder="Hinweis ..."
-                />
-              </FormControl>
-            </VStack>
-          </DrawerBody>
-
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Abbrechen
-            </Button>
-            <Button
-              onClick={() => {
-                addNewQuestion(newQuestion);
-              }}
-              colorScheme="teal"
-            >
-              Hinzufügen
-            </Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
       <Modal
         isCentered
         isOpen={importModalDisclosure.isOpen}

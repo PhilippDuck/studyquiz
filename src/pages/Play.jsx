@@ -36,7 +36,7 @@ function Play() {
   function checkAnswer(answer) {
     
     //console.log(answer);
-    if (answer === questions[currentQuestion].rightAnswer) {
+    if (answer === questions[currentQuestion].answers[questions[currentQuestion].rightAnswer]) {
       toast({
         title: "Richtig!",
         status: "success",
