@@ -1,6 +1,4 @@
-import React from "react";
-
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Heading } from "@chakra-ui/react";
 import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
@@ -14,13 +12,21 @@ import { Progress } from "@chakra-ui/react";
 import { useToast } from "@chakra-ui/react";
 import Question from "../components/Question";
 import { Box } from "@chakra-ui/react";
+import shuffleArray from "../helperFunctions/shuffleArray";
 
 function Play() {
-  let questions = []
+
+  const [questions, setQuestions] = useState([]);
+
+  //Hole Fragen und bringe sie in zufällige Reihenfolge
   const location = useLocation();
-  if (location.state && location.state.questions) {
-    questions = location.state.questions;
- }
+
+  useEffect(() => {
+    if (location.state && location.state.questions) {
+      setQuestions(shuffleArray([...location.state.questions]));
+    }
+  }, [location.state]);
+
  
   const toast = useToast();
   const { colorMode, toggleColorMode } = useColorMode();
@@ -34,7 +40,6 @@ function Play() {
 
 
   function checkAnswer(answer) {
-    
     //console.log(answer);
     if (answer === questions[currentQuestion].answers[questions[currentQuestion].rightAnswer]) {
       toast({
@@ -96,11 +101,13 @@ function Play() {
           </VStack>
         </Center>
       ) : (
-        <Question
-          checkAnswer={checkAnswer}
-          questions={questions}
-          currentQuestion={currentQuestion}
-        />
+        questions.length > 0 && (
+          <Question
+              checkAnswer={checkAnswer}
+              questions={questions}
+              currentQuestion={currentQuestion}
+          />
+      )
       )}
     </>
   );

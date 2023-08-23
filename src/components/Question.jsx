@@ -25,6 +25,7 @@ import {
   QuestionIcon,
   RepeatIcon,
 } from "@chakra-ui/icons";
+import shuffleArray from "../helperFunctions/shuffleArray";
 
 function Question(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -34,12 +35,7 @@ function Question(props) {
   const [newPosition, setNewPosition] = useState(-1);
 
   useEffect(() => {
-    function shuffleArray(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-      }
-    }
+
 
     const originalArray = [...props.questions[props.currentQuestion].answers];
     const positionOfElementToFind = props.questions[props.currentQuestion]
@@ -49,8 +45,8 @@ function Question(props) {
     const elementToFind = originalArray[positionOfElementToFind];
 
     // Erstelle eine Kopie des Arrays und shuffele es
-    const shuffledArray = [...originalArray];
-    shuffleArray(shuffledArray);
+    let shuffledArray = [...originalArray];
+    shuffledArray = shuffleArray(shuffledArray);
 
     // Finde die neue Position des gesuchten Elements im geschüttelten Array
     const newPosition = shuffledArray.indexOf(elementToFind);
