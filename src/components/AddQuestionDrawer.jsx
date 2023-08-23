@@ -43,6 +43,7 @@ function AddQuestionDrawer(props) {
     onSubmit: values => {
         
         props.addNewQuestion(values);
+        formik.resetForm();
         props.onClose();
     },
 });

@@ -29,7 +29,7 @@ import {
 
 function QuestionCard(props) {
   return (
-    <Card _hover={{ border: "1px" }} variant={"outline"} w="100%" >
+    <Card  _hover={{ border: "1px" }} variant={"outline"} w="100%" >
       <CardBody>
         <Accordion allowMultiple>
           <AccordionItem border="none">

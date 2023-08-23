@@ -17,7 +17,7 @@ function Quizzes(props) {
     async function getQuizzes() {
       if (app.currentUser) {
         const result = await app.currentUser.functions.getQuizzes(); // Ersetzen Sie 'IhreFunktionName' durch den Namen Ihrer Funktion
-        console.log('Ergebnis der Funktion:', result);
+        //console.log('Ergebnis der Funktion:', result);
         setQuizzes(result);
       } else {
         console.log("nicht eingeloggt");

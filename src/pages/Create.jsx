@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { AddIcon, DownloadIcon } from "@chakra-ui/icons";
 import QuestionCard from "../components/QuestionCard";
@@ -75,21 +75,20 @@ function Create() {
   async function createNewQuiz() {
     setIsSaving(true);
     try {
-      newQuiz.creationDate = Date.now();
-      console.log(newQuiz);
-      newQuiz.questions = questions;
-
+      const newValue = { ...newQuiz, creationDate: Date.now(), questions: questions };
       // Check if new Quiz is valid
-      if (newQuiz.title != "" && newQuiz.questions.length > 0) {
+      if (newValue.title != "" && newValue.questions.length > 0) {
         const result = await app.currentUser.functions.createQuiz(
-          JSON.stringify(newQuiz)
+          JSON.stringify(newValue)
         );
         toast({
           title: "Quiz erfolgreich erstellt.",
           status: "success",
           duration: 2000,
           isClosable: true,
-        });
+        }); 
+        setNewQuiz(newValue); // Zustand hier aktualisieren
+         
         navigate("/games");
       } else {
         toast({
@@ -105,9 +104,11 @@ function Create() {
     }
     setIsSaving(false);
   }
+  
 
   function addNewQuestion(question) {
     setQuestions([...questions, question]);
+    console.log(questions);
   }
 
   function importJSONQuestions(json) {
@@ -163,7 +164,7 @@ function Create() {
           <FormLabel>Titel:</FormLabel>
           <Input
             onChange={(e) => {
-              setNewQuiz({ title: e.target.value });
+              setNewQuiz({ ...newQuiz, title: e.target.value });
             }}
             type="text"
           />
@@ -206,10 +207,10 @@ function Create() {
       <p>{newQuestion.answers}</p>
       <Box h="10px"></Box>
 
-      <AddQuestionDrawer 
-        addNewQuestion={addNewQuestion} 
-        onOpen={onOpen} 
-        onClose={onClose} 
+      <AddQuestionDrawer
+        addNewQuestion={addNewQuestion}
+        onOpen={onOpen}
+        onClose={onClose}
         isOpen={isOpen}
       />
 
