@@ -10,6 +10,7 @@ import {
   Button,
   Flex,
   Spacer,
+  useToast
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import QuizCard from "../components/QuizCard";
@@ -17,7 +18,9 @@ import { Link, useLocation } from "react-router-dom";
 
 function Quizzes(props) {
   const app = useRealm();
+  const toast = useToast();
   const [quizzes, setQuizzes] = useState();
+  
 
   useEffect(() => {
     async function getQuizzes() {
@@ -42,8 +45,21 @@ function Quizzes(props) {
       
         const updatedQuizzes = quizzes.filter(quiz => quiz._id !== quizId);
         setQuizzes(updatedQuizzes);
+        toast({
+          title: "Quiz wurde erfolgreich entfernt.",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        }); 
+        
       
     } catch (error) {
+      toast({
+        title: "Fehler beim löschen",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      }); 
       console.log(error);
     }
   }
