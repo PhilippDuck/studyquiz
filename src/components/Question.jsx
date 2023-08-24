@@ -7,12 +7,13 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  Tooltip,
+  SimpleGrid,
+  VStack,
+  Flex,
+  Center
 } from "@chakra-ui/react";
-import { Tooltip } from "@chakra-ui/react";
-import { SimpleGrid } from "@chakra-ui/react";
-import { Stack, HStack, VStack } from "@chakra-ui/react";
-import { Flex, Spacer } from "@chakra-ui/react";
-import { Center, Square, Circle } from "@chakra-ui/react";
+
 import { Text } from "@chakra-ui/react";
 import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
 import { Box } from "@chakra-ui/react";
