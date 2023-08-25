@@ -67,15 +67,15 @@ function Question(props) {
             </Text>
           </Center>
         </Box>
-
+        {props.questions[props.currentQuestion].hint != ""? 
         <Tooltip label="Erhalte einen Hinweis">
           <IconButton
-            onClick={onOpen}
+            onClick={()=> {onOpen(); props.handleHintUsed()}}
             isRound="true"
             aria-label="Search database"
             icon={<QuestionIcon />}
           />
-        </Tooltip>
+        </Tooltip>: <></>}
       </Flex>
 
       <SimpleGrid columns={2} spacing={5} w="100%">

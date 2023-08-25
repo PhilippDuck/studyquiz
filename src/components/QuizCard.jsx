@@ -7,7 +7,8 @@ import {
   AlertDialogContent,
   AlertDialogOverlay,
   AlertDialogCloseButton,
-  useDisclosure
+  useDisclosure,
+  Spinner
 } from '@chakra-ui/react'
 import { Link } from "react-router-dom";
 import { useRealm } from "../provider/RealmProvider";
@@ -22,6 +23,7 @@ function QuizCard(props) {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const cancelRef = React.useRef()
+  const [deleteIsLoading, setDeleteIsLoading] = useState(false);
 
   useEffect(() => {
     async function getNicknameById() {
@@ -39,9 +41,11 @@ function QuizCard(props) {
     });
   }, [])
 
-  function handleDelete() {
+  async function handleDelete() {
+    setDeleteIsLoading(true);
+    await props.deleteQuiz(props.quiz._id);
+    setDeleteIsLoading(false);
     onClose();
-    props.deleteQuiz(props.quiz._id);
   }
 
 
@@ -52,7 +56,7 @@ function QuizCard(props) {
         <CardHeader w="100%">
           <Flex >
             <Box flex="1">
-              <Link to={"/play"} state={{ questions: props.quiz.questions }} >
+              <Link to={"/play"} state={{quizId: props.quiz._id.toString(), questions: props.quiz.questions }} >
 
                 <VStack spacing={"2px"} align={"start"} minW="100%">
 
@@ -91,14 +95,14 @@ function QuizCard(props) {
             </AlertDialogHeader>
 
             <AlertDialogBody>
-              Bist du dir sicher?<br /> Das Quiz wird unwiederruflich gelöscht.
+              Bist du dir sicher?<br /> Das Quiz wird unwiderruflich gelöscht.
             </AlertDialogBody>
 
             <AlertDialogFooter>
               <Button ref={cancelRef} onClick={onClose}>
                 Abbrechen
               </Button>
-              <Button colorScheme='red' onClick={handleDelete} ml={3}>
+              <Button leftIcon={deleteIsLoading ? <Spinner size={"xs"}/> :<DeleteIcon/>} colorScheme='red' onClick={handleDelete} ml={3}>
                 Löschen
               </Button>
             </AlertDialogFooter>
