@@ -71,7 +71,7 @@ function Quizzes(props) {
         <Spacer></Spacer>
         <Center>
           <Link to={"/create"}>
-            <Button leftIcon={<AddIcon />} colorScheme={"teal"} size={"sm"}>
+            <Button leftIcon={<AddIcon />} colorScheme={"primary"} size={"sm"}>
               Erstellen
             </Button>
           </Link>

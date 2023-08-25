@@ -24,7 +24,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { LuGamepad2, LuUser } from "react-icons/lu";
-import { App, Credentials } from "realm-web";
+import {  Credentials } from "realm-web";
 import { useRealm } from "./provider/RealmProvider";
 
 function Root() {

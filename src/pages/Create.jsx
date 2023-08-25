@@ -152,7 +152,7 @@ function Create() {
               )
             }
             onClick={createNewQuiz}
-            colorScheme={"teal"}
+            colorScheme={"primary"}
             size={"sm"}
           >
             Speichern
@@ -163,7 +163,8 @@ function Create() {
       <Center w="100%">
         <FormControl isRequired>
           <FormLabel>Titel:</FormLabel>
-          <Input
+          <Input 
+         
             onChange={(e) => {
               setNewQuiz({ ...newQuiz, title: e.target.value });
             }}
@@ -236,7 +237,7 @@ function Create() {
           <ModalFooter>
             <Button
               leftIcon={<DownloadIcon />}
-              colorScheme="teal"
+              colorScheme="primary"
               mr={3}
               onClick={() => importJSONQuestions(json)}
             >

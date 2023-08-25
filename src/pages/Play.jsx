@@ -87,7 +87,7 @@ function Play() {
 
       <Progress
         size="sm"
-        colorScheme="green"
+        colorScheme="blue"
         value={(currentQuestion * 100) / numberOfQuestions}
       />
 
@@ -106,7 +106,7 @@ function Play() {
 
               <Button
                 leftIcon={<RepeatIcon />}
-                colorScheme="teal"
+                colorScheme="primary"
                 onClick={repeatQuiz}
               >
                 wiederholen

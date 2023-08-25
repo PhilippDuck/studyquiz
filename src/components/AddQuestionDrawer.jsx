@@ -130,7 +130,7 @@ function AddQuestionDrawer(props) {
             <Button mr={"2"} onClick={() => cancelAddQuestion()}>
               Abbrechen
             </Button>
-            <Button colorScheme="teal" type="submit">
+            <Button colorScheme="primary" type="submit">
               Frage hinzufügen
             </Button>
           </DrawerFooter>

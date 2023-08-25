@@ -10,11 +10,12 @@ import Quizzes from "./pages/Quizzes";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { RealmProvider } from "./provider/RealmProvider";
+import theme from "./Theme";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <RealmProvider>
-    <ChakraProvider>
+    <ChakraProvider theme={theme}>
       <ColorModeScript />
       <Router>
         <Routes>
