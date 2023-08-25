@@ -87,7 +87,7 @@ function Play() {
 
       <Progress
         size="sm"
-        colorScheme="blue"
+        colorScheme="primary"
         value={(currentQuestion * 100) / numberOfQuestions}
       />
 

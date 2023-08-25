@@ -1,13 +1,14 @@
 import { extendTheme, theme as chakraTheme} from "@chakra-ui/react";
+import { mode } from '@chakra-ui/theme-tools';
 
 const theme = extendTheme({
     colors: {
-        primary: chakraTheme.colors.purple,
+        primary: chakraTheme.colors.teal,
       },
       components: {
         Input: {
           defaultProps: {
-            focusBorderColor: "primary.500",
+            focusBorderColor: "primary.300"
           },
         },
       },
