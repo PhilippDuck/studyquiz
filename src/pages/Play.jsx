@@ -18,13 +18,6 @@ function Play() {
   //Hole Fragen und bringe sie in zufällige Reihenfolge
   const location = useLocation();
 
-  useEffect(() => {
-    if (location.state && location.state.questions) {
-      setQuestions(shuffleArray([...location.state.questions]));
-      setGameData({...gameData, quizId: location.state.quizId});
-    }
-  }, [location.state]);
-
   const toast = useToast();
   const [quizIsDone, setQuizIsDone] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -33,11 +26,25 @@ function Play() {
   const [gameData, setGameData] = useState({
     quizId: "",
     playerId: "",
-    startTime: 0,
+    startTime: Date.now(),
     endTime: 0,
+    playedTime: 0,
     mistakes: 0,
     usedHints: 0,
   });
+
+  useEffect(() => {
+    if (location.state && location.state.questions) {
+      setQuestions(shuffleArray([...location.state.questions]));
+      setGameData({...gameData, quizId: location.state.quizId});
+    }
+  }, [location.state]);
+
+  useEffect(()=> {
+    setGameData({...gameData, endTime: Date.now(), playedTime: (Date.now()-gameData.startTime)/1000})
+  }, [quizIsDone])
+
+ 
 
   function checkAnswer(answer) {
     //console.log(answer);
@@ -75,6 +82,10 @@ function Play() {
       ...gameData, 
       mistakes: 0,
       usedHints: 0,
+      startTime: Date.now(),
+      endTime: 0,
+      playedTime: 0
+
 
     })
   }
@@ -97,7 +108,9 @@ function Play() {
           <VStack spacing={10}>
             <Heading>Quiz beendet!</Heading>
             <Box><Text>Du hast {gameData.mistakes} Fehler gemacht</Text>
-            <Text>und { gameData.usedHints} {gameData.usedHints === 1 ? "Hinweis": "Hinweise"} genutzt</Text></Box>
+            <Text>und { gameData.usedHints} {gameData.usedHints === 1 ? "Hinweis": "Hinweise"} genutzt</Text>
+            <Text>Du hast {gameData.playedTime} Sekunden gebraucht.</Text>
+            </Box>
             
             <ButtonGroup>
               <Link to={"/games"}>

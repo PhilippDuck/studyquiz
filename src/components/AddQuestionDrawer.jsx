@@ -96,6 +96,7 @@ function AddQuestionDrawer(props) {
 <FormControl isInvalid={formik.touched.rightAnswer && formik.errors.rightAnswer}>
                 <FormLabel htmlFor="rightAnswer">Richtige Antwort</FormLabel>
                 <Select
+              
                     id="rightAnswer"
                     name="rightAnswer"
                     onChange={formik.handleChange}
