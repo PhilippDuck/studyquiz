@@ -22,7 +22,7 @@ function Play() {
   const [quizIsDone, setQuizIsDone] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
-  const [mistakeCounter, setMistakeCounter] = useState(0);
+
   const [gameData, setGameData] = useState({
     quizId: "",
     playerId: "",
@@ -41,7 +41,13 @@ function Play() {
   }, [location.state]);
 
   useEffect(()=> {
-    setGameData({...gameData, endTime: Date.now(), playedTime: (Date.now()-gameData.startTime)/1000})
+    setGameData({
+      ...gameData,
+      endTime: Date.now(),
+      playedTime: (Date.now()-gameData.startTime)/1000,
+      points: (numberOfQuestions - gameData.mistakes - (gameData.usedHints*0.1)),}
+      )
+
   }, [quizIsDone])
 
  
@@ -84,7 +90,8 @@ function Play() {
       usedHints: 0,
       startTime: Date.now(),
       endTime: 0,
-      playedTime: 0
+      playedTime: 0,
+      points:0,
 
 
     })
@@ -108,6 +115,7 @@ function Play() {
           <VStack spacing={10}>
 
             <Heading>Quiz beendet!</Heading>
+            <Heading >{gameData.points} {gameData.points === 1 || gameData.points === -1 ? "Punkt": "Punkte"}</Heading>
             <Box><Text>Du hast <b>{gameData.mistakes}</b> Fehler gemacht</Text>
             <Text>und <b>{ gameData.usedHints} </b>{gameData.usedHints === 1 ? "Hinweis": "Hinweise"} genutzt.</Text>
             
