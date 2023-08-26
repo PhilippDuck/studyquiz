@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Heading } from "@chakra-ui/react";
+import { Card, CardHeader, Heading } from "@chakra-ui/react";
 import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
 import { useLocation, Link } from "react-router-dom";
@@ -11,9 +11,13 @@ import { useToast } from "@chakra-ui/react";
 import Question from "../components/Question";
 import { Box } from "@chakra-ui/react";
 import shuffleArray from "../helperFunctions/shuffleArray";
+import { useRealm } from "../provider/RealmProvider";
+import PlayedQuizCard from "../components/playedQuizCard";
+
 
 function Play() {
   const [questions, setQuestions] = useState([]);
+  const app = useRealm();
 
   //Hole Fragen und bringe sie in zufällige Reihenfolge
   const location = useLocation();
@@ -22,10 +26,9 @@ function Play() {
   const [quizIsDone, setQuizIsDone] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
+  const [lastPlayedQuizzes, setLastPlayedQuizzes] = useState([]);
 
   const [gameData, setGameData] = useState({
-    quizId: "",
-    playerId: "",
     startTime: Date.now(),
     endTime: 0,
     playedTime: 0,
@@ -36,21 +39,41 @@ function Play() {
   useEffect(() => {
     if (location.state && location.state.questions) {
       setQuestions(shuffleArray([...location.state.questions]));
-      setGameData({...gameData, quizId: location.state.quizId});
     }
   }, [location.state]);
 
-  useEffect(()=> {
-    setGameData({
+  useEffect(() => {
+    const newGamedata = {
       ...gameData,
+      quizId: location.state.quizId,
+      playerId: app.currentUser.id,
       endTime: Date.now(),
-      playedTime: (Date.now()-gameData.startTime)/1000,
-      points: (numberOfQuestions - gameData.mistakes - (gameData.usedHints*0.1)),}
-      )
+      playedTime: (Date.now() - gameData.startTime) / 1000,
+      points: numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1,
+    };
+    if (quizIsDone) {
+      addPlayedQuiz(newGamedata);
+    }
+    setGameData(newGamedata);
+  }, [quizIsDone]);
 
-  }, [quizIsDone])
+  async function addPlayedQuiz(quizData) {
+    const result = await app.currentUser.functions.addPlayedQuiz(
+      JSON.stringify(quizData)
+    );
+    const lastQuizzesResult = await getLastFivePlayedQuizzesByQuizId(location.state.quizId);
+    setLastPlayedQuizzes(lastQuizzesResult)
+    console.log(lastQuizzesResult);
+  }
 
- 
+  async function getLastFivePlayedQuizzesByQuizId(quizId) {
+    const result = await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(
+      quizId)
+    
+    console.log(quizId.toString());
+    console.log(result);
+    return result;
+  }
 
   function checkAnswer(answer) {
     //console.log(answer);
@@ -73,28 +96,26 @@ function Play() {
         status: "error",
         duration: 700,
       });
-      setGameData({...gameData, mistakes: gameData.mistakes +1})
+      setGameData({ ...gameData, mistakes: gameData.mistakes + 1 });
     }
   }
 
   function handleHintUsed() {
-    setGameData({...gameData, usedHints: gameData.usedHints+1})
+    setGameData({ ...gameData, usedHints: gameData.usedHints + 1 });
   }
 
   function repeatQuiz() {
     setCurrentQuestion(0);
     setQuizIsDone(false);
     setGameData({
-      ...gameData, 
+      ...gameData,
       mistakes: 0,
       usedHints: 0,
       startTime: Date.now(),
       endTime: 0,
       playedTime: 0,
-      points:0,
-
-
-    })
+      points: 0,
+    });
   }
   return (
     <>
@@ -111,18 +132,29 @@ function Play() {
 
       <Box h="40px"></Box>
       {quizIsDone ? (
-        <Center>
-          <VStack spacing={10}>
-
+        <Center >
+          <VStack w="100%"  spacing={10}>
             <Heading>Quiz beendet!</Heading>
-            <Heading >{gameData.points} {gameData.points === 1 || gameData.points === -1 ? "Punkt": "Punkte"}</Heading>
-            <Box><Text>Du hast <b>{gameData.mistakes}</b> Fehler gemacht</Text>
-            <Text>und <b>{ gameData.usedHints} </b>{gameData.usedHints === 1 ? "Hinweis": "Hinweise"} genutzt.</Text>
-            
+            <Heading>
+              {gameData.points}{" "}
+              {gameData.points === 1 || gameData.points === -1
+                ? "Punkt"
+                : "Punkte"}
+            </Heading>
+            <Box>
+              <Text>
+                Du hast <b>{gameData.mistakes}</b> Fehler gemacht
+              </Text>
+              <Text>
+                und <b>{gameData.usedHints} </b>
+                {gameData.usedHints === 1 ? "Hinweis" : "Hinweise"} genutzt.
+              </Text>
             </Box>
-            <Text align={"center"}>Für das Quiz hast Du <b>{gameData.playedTime}</b> Sekunden gebraucht.</Text>
-            
-  
+            <Text align={"center"}>
+              Für das Quiz hast Du <b>{gameData.playedTime}</b> Sekunden
+              gebraucht.
+            </Text>
+
             <ButtonGroup>
               <Link to={"/games"}>
                 <Button>Beenden</Button>
@@ -136,6 +168,19 @@ function Play() {
                 wiederholen
               </Button>
             </ButtonGroup>
+            <Heading size={"lg"}>Letze Spiele:</Heading>
+            <Box w="100%" mb={"20px"}>
+              
+              <VStack>
+                {
+                  lastPlayedQuizzes.map((playedQuiz) => {
+                    return <PlayedQuizCard key={playedQuiz._id} playedQuiz={playedQuiz} />
+                  })
+                }
+              </VStack>
+            </Box>
+
+            
           </VStack>
         </Center>
       ) : (
