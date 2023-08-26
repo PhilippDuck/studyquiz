@@ -135,7 +135,7 @@ function Play() {
         
         <Center >
           <VStack w="100%"  spacing={10}>
-            <Card  w={"100%"}>
+            <Card variant={"outline"}  w={"100%"}>
               <CardHeader>
                 <VStack spacing={10}>
             <Heading>Quiz beendet!</Heading>
