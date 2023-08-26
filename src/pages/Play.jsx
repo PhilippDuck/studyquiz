@@ -106,13 +106,15 @@ function Play() {
       {quizIsDone ? (
         <Center>
           <VStack spacing={10}>
+
             <Heading>Quiz beendet!</Heading>
             <Box><Text>Du hast <b>{gameData.mistakes}</b> Fehler gemacht</Text>
             <Text>und <b>{ gameData.usedHints} </b>{gameData.usedHints === 1 ? "Hinweis": "Hinweise"} genutzt.</Text>
             
             </Box>
-            <Text>Für das Quiz hast Du <b>{gameData.playedTime}</b> Sekunden gebraucht.</Text>
+            <Text align={"center"}>Für das Quiz hast Du <b>{gameData.playedTime}</b> Sekunden gebraucht.</Text>
             
+  
             <ButtonGroup>
               <Link to={"/games"}>
                 <Button>Beenden</Button>
