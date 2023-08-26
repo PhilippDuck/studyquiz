@@ -1,12 +1,23 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import {Card, Text, CardHeader, } from "@chakra-ui/react";
+import {Card, Text, CardHeader, Avatar, Flex, Box, Center, Tooltip } from "@chakra-ui/react";
 import { useRealm } from "../provider/RealmProvider";
 
 
 function PlayedQuizCard(props) {
     const [owner, setOwner] = useState("");
     const app = useRealm();
+
+    function unixToReadableDate(unixTimestamp) {
+        // Erstellt ein neues Date-Objekt basierend auf dem Unix-Timestamp (multipliziert mit 1000, da JavaScript Millisekunden erwartet)
+        const date = new Date(unixTimestamp);
+      
+        // Formatierung des Datums und der Uhrzeit
+        const formattedDate = date.toLocaleDateString(); // z.B. "26.08.2023"
+        const formattedTime = date.toLocaleTimeString(); // z.B. "12:34:56"
+      
+        return `${formattedDate} ${formattedTime}`;
+      }
     
 
     useEffect(() => {
@@ -28,14 +39,18 @@ function PlayedQuizCard(props) {
   return (
     <Card variant={"outline"} w={"100%"} >
       <CardHeader>
-        <Text>{owner}</Text>
-        <Text>{props.playedQuiz.playedTime} Sekunden</Text>
+        <Flex gap={"20px"}><Center><Tooltip label={owner}><Avatar name={owner} /></Tooltip></Center>
+        <Box>
+        <Text fontSize={"xs"}>{unixToReadableDate(props.playedQuiz.endTime)} Uhr </Text>
+        <Text></Text>
         <Text>
-          {props.playedQuiz.points}{" "}
+          <b>{props.playedQuiz.points}{" "}
           {props.playedQuiz.points === 1 || props.playedQuiz.points === -1
             ? "Punkt"
-            : "Punkte"}
+            : "Punkte"}</b> in <b>{props.playedQuiz.playedTime} Sekunden</b> erreicht.
         </Text>
+        </Box>
+        </Flex>
       </CardHeader>
     </Card>
   );

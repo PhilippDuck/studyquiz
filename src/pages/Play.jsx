@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardHeader, Heading } from "@chakra-ui/react";
+import { Card, CardHeader, Heading,CardFooter } from "@chakra-ui/react";
 import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
 import { Stack, HStack, VStack } from "@chakra-ui/react";
 import { useLocation, Link } from "react-router-dom";
@@ -132,28 +132,33 @@ function Play() {
 
       <Box h="40px"></Box>
       {quizIsDone ? (
+        
         <Center >
           <VStack w="100%"  spacing={10}>
+            <Card  w={"100%"}>
+              <CardHeader>
+                <VStack spacing={10}>
             <Heading>Quiz beendet!</Heading>
             <Heading>
               {gameData.points}{" "}
               {gameData.points === 1 || gameData.points === -1
                 ? "Punkt"
-                : "Punkte"}
+                : "Punkte"} {"("}{(100/numberOfQuestions)*gameData.points} {"%)"}
             </Heading>
             <Box>
               <Text>
-                Du hast <b>{gameData.mistakes}</b> Fehler gemacht
+                <b>{gameData.mistakes}</b> Fehler
               </Text>
               <Text>
-                und <b>{gameData.usedHints} </b>
-                {gameData.usedHints === 1 ? "Hinweis" : "Hinweise"} genutzt.
+                <b>{gameData.usedHints} </b>
+                {gameData.usedHints === 1 ? "Hinweis" : "Hinweise"} genutzt
               </Text>
-            </Box>
-            <Text align={"center"}>
-              Für das Quiz hast Du <b>{gameData.playedTime}</b> Sekunden
-              gebraucht.
+              <Text align={"center"}>
+               <b>{gameData.playedTime}</b> Sekunden
+              gebraucht
             </Text>
+            </Box>
+            
 
             <ButtonGroup>
               <Link to={"/games"}>
@@ -168,7 +173,10 @@ function Play() {
                 wiederholen
               </Button>
             </ButtonGroup>
-            <Heading size={"lg"}>Letze Spiele:</Heading>
+            </VStack>
+            </CardHeader>
+            </Card>
+            <Heading size={"lg"}>Letzte Spiele:</Heading>
             <Box w="100%" mb={"20px"}>
               
               <VStack>
