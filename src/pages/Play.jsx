@@ -35,7 +35,7 @@ function Play() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
   const [lastPlayedQuizzes, setLastPlayedQuizzes] = useState([]);
-  const [isloadingLastQuizzes, setIsLoadingLastQuizzes] = useState(true);
+  const [isloadingLastQuizzes, setIsLoadingLastQuizzes] = useState(false);
 
   const [gameData, setGameData] = useState({
     startTime: Date.now(),
