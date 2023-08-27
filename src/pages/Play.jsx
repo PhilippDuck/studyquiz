@@ -13,7 +13,8 @@ import {
   AccordionPanel,
   AccordionIcon,
   Flex,
-  Spacer
+  Spacer,
+  Spinner
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import Question from "../components/Question";
@@ -34,6 +35,7 @@ function Play() {
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
   const [lastPlayedQuizzes, setLastPlayedQuizzes] = useState([]);
+  const [isloadingLastQuizzes, setIsLoadingLastQuizzes] = useState(true);
 
   const [gameData, setGameData] = useState({
     startTime: Date.now(),
@@ -72,12 +74,14 @@ function Play() {
   }
 
   async function getLastFivePlayedQuizzesByQuizId(quizId) {
+    setIsLoadingLastQuizzes(true);
     const result =
       await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(quizId);
     setLastPlayedQuizzes(result);
 
     console.log(quizId.toString());
     console.log(result);
+    setIsLoadingLastQuizzes(false);
     return result;
   }
 
@@ -160,7 +164,7 @@ function Play() {
                   <AccordionButton >
                     <Flex w="100%">
 
-                      <Heading size={"md"}>Zuletzt gespielt:</Heading>
+                      <Heading size={"md"}>Zuletzt gespielt:</Heading>{isloadingLastQuizzes?<Spinner/>:""}
 
                       <Spacer></Spacer>
                       <AccordionIcon />
@@ -168,6 +172,7 @@ function Play() {
                   </AccordionButton>
 
                   <AccordionPanel pb={4}>
+                
                     <VStack>
                       {lastPlayedQuizzes.map((playedQuiz) => {
                         return (
@@ -178,7 +183,7 @@ function Play() {
                         );
                       })}
 
-                    </VStack>
+                    </VStack> 
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
