@@ -7,8 +7,15 @@ import {
   Progress,
   useToast,
   Box,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  Flex,
+  Spacer
 } from "@chakra-ui/react";
-import { useLocation} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import Question from "../components/Question";
 import shuffleArray from "../helperFunctions/shuffleArray";
 import { useRealm } from "../provider/RealmProvider";
@@ -61,16 +68,13 @@ function Play() {
     const result = await app.currentUser.functions.addPlayedQuiz(
       JSON.stringify(quizData)
     );
-    const lastQuizzesResult = await getLastFivePlayedQuizzesByQuizId(
-      location.state.quizId
-    );
-    setLastPlayedQuizzes(lastQuizzesResult);
-    console.log(lastQuizzesResult);
+
   }
 
   async function getLastFivePlayedQuizzesByQuizId(quizId) {
     const result =
       await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(quizId);
+    setLastPlayedQuizzes(result);
 
     console.log(quizId.toString());
     console.log(result);
@@ -107,8 +111,10 @@ function Play() {
   }
 
   function repeatQuiz() {
+    console.log("repeat");
     setCurrentQuestion(0);
     setQuizIsDone(false);
+    setLastPlayedQuizzes([])
     setGameData({
       ...gameData,
       mistakes: 0,
@@ -139,19 +145,43 @@ function Play() {
             <ScoreCard
               numberOfQuestions={numberOfQuestions}
               gameData={gameData}
+              repeatQuiz={repeatQuiz}
             />
-            <Heading size={"lg"}>Letzte Spiele:</Heading>
+
             <Box w="100%" mb={"20px"}>
-              <VStack>
-                {lastPlayedQuizzes.map((playedQuiz) => {
-                  return (
-                    <PlayedQuizCard
-                      key={playedQuiz._id}
-                      playedQuiz={playedQuiz}
-                    />
-                  );
-                })}
-              </VStack>
+
+              <Accordion onChange={(indices) => {
+                // Überprüfen, ob das AccordionItem geöffnet ist (Index 0 in diesem Fall)
+                if (indices.includes(0) && lastPlayedQuizzes.length === 0) {
+                  getLastFivePlayedQuizzesByQuizId(location.state.quizId);
+                }
+              }} allowMultiple>
+                <AccordionItem border="none">
+                  <AccordionButton >
+                    <Flex w="100%">
+
+                      <Heading size={"md"}>Zuletzt gespielt:</Heading>
+
+                      <Spacer></Spacer>
+                      <AccordionIcon />
+                    </Flex>
+                  </AccordionButton>
+
+                  <AccordionPanel pb={4}>
+                    <VStack>
+                      {lastPlayedQuizzes.map((playedQuiz) => {
+                        return (
+                          <PlayedQuizCard
+                            key={playedQuiz._id}
+                            playedQuiz={playedQuiz}
+                          />
+                        );
+                      })}
+
+                    </VStack>
+                  </AccordionPanel>
+                </AccordionItem>
+              </Accordion>
             </Box>
           </VStack>
         </Center>
@@ -162,7 +192,7 @@ function Play() {
             questions={questions}
             currentQuestion={currentQuestion}
             handleHintUsed={handleHintUsed}
-            repeatQuiz={repeatQuiz}
+
           />
         )
       )}

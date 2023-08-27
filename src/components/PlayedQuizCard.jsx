@@ -42,7 +42,7 @@ function PlayedQuizCard(props) {
         <Flex gap={"20px"}><Center><Tooltip label={owner}><Avatar name={owner} /></Tooltip></Center>
         <Box>
         <Text fontSize={"xs"}>{unixToReadableDate(props.playedQuiz.endTime)} Uhr </Text>
-        <Text></Text>
+        <b><Text>{owner}</Text></b>
         <Text>
           <b>{props.playedQuiz.points}{" "}
           {props.playedQuiz.points === 1 || props.playedQuiz.points === -1

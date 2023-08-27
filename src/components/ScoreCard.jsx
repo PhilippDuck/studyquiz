@@ -19,6 +19,11 @@ import { useLocation, Link } from "react-router-dom";
 
 
 function ScoreCard(props) {
+
+  function handleReapeatQuiz() {
+    props.repeatQuiz();
+  }
+
   return (
     <Card variant={"outline"} w={"100%"}>
       <CardHeader>
@@ -59,7 +64,7 @@ function ScoreCard(props) {
             <Button
               leftIcon={<RepeatIcon />}
               colorScheme="primary"
-              onClick={props.repeatQuiz}
+              onClick={handleReapeatQuiz}
             >
               wiederholen
             </Button>
