@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardHeader, Heading,CardFooter } from "@chakra-ui/react";
-import { useColorMode, Button, ButtonGroup } from "@chakra-ui/react";
-import { Stack, HStack, VStack } from "@chakra-ui/react";
-import { useLocation, Link } from "react-router-dom";
-import { RepeatIcon } from "@chakra-ui/icons";
-import { Center, Square, Circle } from "@chakra-ui/react";
-import { Text } from "@chakra-ui/react";
-import { Progress } from "@chakra-ui/react";
-import { useToast } from "@chakra-ui/react";
+import {
+  Heading,
+  VStack,
+  Center,
+  Text,
+  Progress,
+  useToast,
+  Box,
+} from "@chakra-ui/react";
+import { useLocation} from "react-router-dom";
 import Question from "../components/Question";
-import { Box } from "@chakra-ui/react";
 import shuffleArray from "../helperFunctions/shuffleArray";
 import { useRealm } from "../provider/RealmProvider";
 import PlayedQuizCard from "../components/playedQuizCard";
-
+import ScoreCard from "../components/ScoreCard";
 
 function Play() {
   const [questions, setQuestions] = useState([]);
@@ -61,15 +61,17 @@ function Play() {
     const result = await app.currentUser.functions.addPlayedQuiz(
       JSON.stringify(quizData)
     );
-    const lastQuizzesResult = await getLastFivePlayedQuizzesByQuizId(location.state.quizId);
-    setLastPlayedQuizzes(lastQuizzesResult)
+    const lastQuizzesResult = await getLastFivePlayedQuizzesByQuizId(
+      location.state.quizId
+    );
+    setLastPlayedQuizzes(lastQuizzesResult);
     console.log(lastQuizzesResult);
   }
 
   async function getLastFivePlayedQuizzesByQuizId(quizId) {
-    const result = await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(
-      quizId)
-    
+    const result =
+      await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(quizId);
+
     console.log(quizId.toString());
     console.log(result);
     return result;
@@ -132,63 +134,25 @@ function Play() {
 
       <Box h="40px"></Box>
       {quizIsDone ? (
-        
-        <Center >
-          <VStack w="100%"  spacing={10}>
-            <Card variant={"outline"}  w={"100%"}>
-              <CardHeader>
-                <VStack spacing={10}>
-            <Heading>Quiz beendet!</Heading>
-            <Heading>
-              {gameData.points}{" "}
-              {gameData.points === 1 || gameData.points === -1
-                ? "Punkt"
-                : "Punkte"} {"("}{(100/numberOfQuestions)*gameData.points} {"%)"}
-            </Heading>
-            <Box>
-              <Text>
-                <b>{gameData.mistakes}</b> Fehler
-              </Text>
-              <Text>
-                <b>{gameData.usedHints} </b>
-                {gameData.usedHints === 1 ? "Hinweis" : "Hinweise"} genutzt
-              </Text>
-              <Text align={"center"}>
-               <b>{gameData.playedTime}</b> Sekunden
-              gebraucht
-            </Text>
-            </Box>
-            
-
-            <ButtonGroup>
-              <Link to={"/games"}>
-                <Button>Beenden</Button>
-              </Link>
-
-              <Button
-                leftIcon={<RepeatIcon />}
-                colorScheme="primary"
-                onClick={repeatQuiz}
-              >
-                wiederholen
-              </Button>
-            </ButtonGroup>
-            </VStack>
-            </CardHeader>
-            </Card>
+        <Center>
+          <VStack w="100%" spacing={10}>
+            <ScoreCard
+              numberOfQuestions={numberOfQuestions}
+              gameData={gameData}
+            />
             <Heading size={"lg"}>Letzte Spiele:</Heading>
             <Box w="100%" mb={"20px"}>
-              
               <VStack>
-                {
-                  lastPlayedQuizzes.map((playedQuiz) => {
-                    return <PlayedQuizCard key={playedQuiz._id} playedQuiz={playedQuiz} />
-                  })
-                }
+                {lastPlayedQuizzes.map((playedQuiz) => {
+                  return (
+                    <PlayedQuizCard
+                      key={playedQuiz._id}
+                      playedQuiz={playedQuiz}
+                    />
+                  );
+                })}
               </VStack>
             </Box>
-
-            
           </VStack>
         </Center>
       ) : (
@@ -198,6 +162,7 @@ function Play() {
             questions={questions}
             currentQuestion={currentQuestion}
             handleHintUsed={handleHintUsed}
+            repeatQuiz={repeatQuiz}
           />
         )
       )}
