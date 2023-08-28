@@ -42,12 +42,12 @@ function PlayedQuizCard(props) {
         <Flex gap={"20px"}><Center><Tooltip label={owner}><Avatar name={owner} /></Tooltip></Center>
         <Box>
         <Text fontSize={"xs"}>{unixToReadableDate(props.playedQuiz.endTime)} Uhr </Text>
-        <b><Text>{owner}</Text></b>
-        <Text>
-          <b>{props.playedQuiz.points}{" "}
+        {props.withQuizName ?<Text fontSize={"xs"}><b>{owner}</b>{" hat das Quiz " + props.playedQuiz._id + " gespielt."} </Text> : <b><Text>{owner}</Text></b>}
+        <Text fontSize={"xs"}>
+          {props.playedQuiz.points}{" "}
           {props.playedQuiz.points === 1 || props.playedQuiz.points === -1
             ? "Punkt"
-            : "Punkte"}</b> in <b>{props.playedQuiz.playedTime} Sekunden</b> erreicht.
+            : "Punkte"} in {props.playedQuiz.playedTime} Sekunden erreicht.
         </Text>
         </Box>
         </Flex>

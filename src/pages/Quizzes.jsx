@@ -67,7 +67,7 @@ function Quizzes(props) {
   return (
     <>
       <Flex>
-        <Heading>Spielen</Heading>
+        <Heading size={"lg"}>Spielen</Heading>
         <Spacer></Spacer>
         <Center>
           <Link to={"/create"}>

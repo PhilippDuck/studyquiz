@@ -52,7 +52,7 @@ function QuizCard(props) {
   return (
     <Box w="100%">
 
-      <Card variant={"outline"} _hover={{ border: "1px", cursor: "pointer" }} size="sm" w="100%" direction={{ base: 'column', sm: 'row' }}>
+      <Card  _hover={{ border: "1px", cursor: "pointer" }} size="sm" w="100%" direction={{ base: 'column', sm: 'row' }}>
         <CardHeader w="100%">
           <Flex >
             <Box flex="1">
