@@ -14,7 +14,8 @@ import {
   AccordionIcon,
   Flex,
   Spacer,
-  Spinner
+  Spinner,
+  Container
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import Question from "../components/Question";
@@ -130,7 +131,7 @@ function Play() {
     });
   }
   return (
-    <>
+    <Container>
       <Center>
         <Text>{currentQuestion + " / " + numberOfQuestions}</Text>
       </Center>
@@ -201,7 +202,7 @@ function Play() {
           />
         )
       )}
-    </>
+    </Container>
   );
 }
 

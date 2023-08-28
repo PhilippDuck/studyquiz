@@ -121,7 +121,7 @@ function Root() {
         </Flex>
       </Box>
 
-      <Container maxW={"2xl"}>
+      <Box>
         <Box h="20px"></Box>
         {isLogged ? (
           <Outlet />
@@ -130,7 +130,7 @@ function Root() {
             <Spinner size="xl" />
           </Center>
         )}
-      </Container>
+      </Box>
     </>
   );
 }

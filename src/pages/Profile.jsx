@@ -9,7 +9,8 @@ import {
     ModalCloseButton,
     useDisclosure,
     Input,
-    IconButton
+    IconButton,
+    Container
 } from '@chakra-ui/react'
 import { useRealm } from "../provider/RealmProvider";
 import {MdOutlineModeEditOutline} from "react-icons/md"
@@ -40,7 +41,7 @@ function Profile() {
 
 
     return (
-        <>
+        <Container>
             <Heading>Profil</Heading>
             <Center>
                 <VStack spacing={"20px"}>
@@ -59,8 +60,7 @@ function Profile() {
 
             </Center>
 
-            <Box h="20px" />
-            <Text>{"ID: " + app.currentUser.id}</Text>
+        
 
 
             <Modal isCentered isOpen={isOpen} onClose={onClose}>
@@ -79,7 +79,7 @@ function Profile() {
                 </ModalContent>
             </Modal>
 
-        </>
+        </Container>
     )
 }
 

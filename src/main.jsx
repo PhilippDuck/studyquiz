@@ -7,6 +7,7 @@ import Create from "./pages/Create";
 import Play from "./pages/Play.jsx";
 import Root from "./Root.jsx";
 import Quizzes from "./pages/Quizzes";
+import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 import { RealmProvider } from "./provider/RealmProvider";
@@ -21,7 +22,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/" element={<Root />}>
             <Route index element={<Navigate to="/games" replace />} />
-            <Route path="games" element={<Quizzes />} />
+            <Route path="games" element={<Home />} />
             <Route path="play" element={<Play />} />
             <Route path="create" element={<Create />} />
             <Route path="profile" element={<Profile />} />

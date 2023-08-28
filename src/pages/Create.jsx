@@ -29,6 +29,7 @@ import {
   ButtonGroup,
   useToast,
   Spinner,
+  Container
 } from "@chakra-ui/react";
 import AddQuestionDrawer from "../components/AddQuestionDrawer";
 
@@ -138,7 +139,7 @@ function Create() {
   }
 
   return (
-    <>
+    <Container>
       <Flex>
         <Heading>Spiel erstellen</Heading>
         <Spacer></Spacer>
@@ -246,7 +247,7 @@ function Create() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </Container>
   );
 }
 
