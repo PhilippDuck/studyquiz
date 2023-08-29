@@ -53,13 +53,15 @@ function Play() {
   }, [location.state]);
 
   useEffect(() => {
+    const points = numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1;
+    const relativePoints = ((100 /numberOfQuestions) * points) < 0 ? 0 : ((100 /numberOfQuestions) * points);
     const newGamedata = {
       ...gameData,
       quizId: location.state.quizId,
       playerId: app.currentUser.id,
       endTime: Date.now(),
       playedTime: (Date.now() - gameData.startTime) / 1000,
-      points: numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1,
+      points: relativePoints,
     };
     if (quizIsDone) {
       addPlayedQuiz(newGamedata);
