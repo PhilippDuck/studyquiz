@@ -10,6 +10,7 @@ import Quizzes from "./pages/Quizzes";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import Highscores from "./pages/Highscores";
 import { RealmProvider } from "./provider/RealmProvider";
 import theme from "./Theme";
 
@@ -26,6 +27,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
             <Route path="play" element={<Play />} />
             <Route path="create" element={<Create />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="highscores" element={<Highscores />} />
+
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

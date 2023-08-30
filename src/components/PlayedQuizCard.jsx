@@ -11,21 +11,13 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { useRealm } from "../provider/RealmProvider";
+import unixToReadableDate from "../helperFunctions/unixTimeToReadable";
 
 function PlayedQuizCard(props) {
   const [owner, setOwner] = useState("");
   const app = useRealm();
 
-  function unixToReadableDate(unixTimestamp) {
-    // Erstellt ein neues Date-Objekt basierend auf dem Unix-Timestamp (multipliziert mit 1000, da JavaScript Millisekunden erwartet)
-    const date = new Date(unixTimestamp);
 
-    // Formatierung des Datums und der Uhrzeit
-    const formattedDate = date.toLocaleDateString(); // z.B. "26.08.2023"
-    const formattedTime = date.toLocaleTimeString(); // z.B. "12:34:56"
-
-    return `${formattedDate} ${formattedTime}`;
-  }
 
   useEffect(() => {
     async function getNicknameById() {
@@ -55,7 +47,7 @@ function PlayedQuizCard(props) {
           </Center>
           <Box>
             <Text fontSize={"xs"}>
-              {unixToReadableDate(props.playedQuiz.endTime)} Uhr{" "}
+              {unixToReadableDate(props.playedQuiz.endTime).formattedDate} {unixToReadableDate(props.playedQuiz.endTime).formattedTime} Uhr{" "}
             </Text>
             {props.withQuizName ? (
               <Text fontSize={"xs"}>

@@ -23,6 +23,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
+import {HiChartBar} from "react-icons/hi2";
 import { LuGamepad2, LuUser } from "react-icons/lu";
 import {  Credentials } from "realm-web";
 import { useRealm } from "./provider/RealmProvider";
@@ -89,6 +90,15 @@ function Root() {
                       <HStack>
                         <LuGamepad2 />
                         <Text>Spielen</Text>
+                      </HStack>
+                    </MenuItem>
+                  </Link>
+
+                  <Link to={`highscores/`}>
+                    <MenuItem>
+                      <HStack>
+                        <HiChartBar />
+                        <Text>Bestenlisten</Text>
                       </HStack>
                     </MenuItem>
                   </Link>

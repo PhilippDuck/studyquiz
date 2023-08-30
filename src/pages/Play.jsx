@@ -16,22 +16,14 @@ import {
   Spacer,
   Spinner,
   Container,
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
+
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import Question from "../components/Question";
 import shuffleArray from "../helperFunctions/shuffleArray";
 import { useRealm } from "../provider/RealmProvider";
-import PlayedQuizCard from "../components/playedQuizCard";
 import ScoreCard from "../components/ScoreCard";
+import HighscoreTable from "../components/HighscoreTable";
 
 function Play() {
   const [questions, setQuestions] = useState([]);
@@ -44,8 +36,7 @@ function Play() {
   const [quizIsDone, setQuizIsDone] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
-  const [highscore, setHighscore] = useState([]);
-  const [isloadingLastQuizzes, setIsLoadingLastQuizzes] = useState(false);
+
 
   const [gameData, setGameData] = useState({
     startTime: Date.now(),
@@ -86,33 +77,6 @@ function Play() {
     const result = await app.currentUser.functions.addPlayedQuiz(
       JSON.stringify(quizData)
     );
-  }
-
-  function unixToReadableDate(unixTimestamp) {
-    // Erstellt ein neues Date-Objekt basierend auf dem Unix-Timestamp (multipliziert mit 1000, da JavaScript Millisekunden erwartet)
-    const date = new Date(unixTimestamp);
-
-    // Formatierung des Datums und der Uhrzeit
-    const formattedDate = date.toLocaleDateString(); // z.B. "26.08.2023"
-    const formattedTime = date.toLocaleTimeString(); // z.B. "12:34:56"
-
-    return `${formattedDate} ${formattedTime}`;
-  }
-
-  async function getHighscoreByQuizId(quizId) {
-    setIsLoadingLastQuizzes(true);
-    //console.log(quizId)
-    const result = await app.currentUser.functions.getHighscoreByQuizId(
-      quizId.toString(),
-      10
-    );
-    //console.log(result);
-    setHighscore(result);
-
-    console.log(quizId.toString());
-    console.log(result);
-    setIsLoadingLastQuizzes(false);
-    return result;
   }
 
   function checkAnswer(answer) {
@@ -184,19 +148,14 @@ function Play() {
 
             <Box w="100%" mb={"20px"}>
               <Accordion
-                onChange={(indices) => {
-                  // Überprüfen, ob das AccordionItem geöffnet ist (Index 0 in diesem Fall)
-                  if (indices.includes(0) && highscore.length === 0) {
-                    getHighscoreByQuizId(location.state.quizId);
-                  }
-                }}
+                
                 allowMultiple
               >
                 <AccordionItem border="none">
                   <AccordionButton>
                     <Flex w="100%">
                       <Heading size={"md"}>Bestenliste:</Heading>
-                      {isloadingLastQuizzes ? <Spinner /> : ""}
+                    
 
                       <Spacer></Spacer>
                       <AccordionIcon />
@@ -205,40 +164,7 @@ function Play() {
 
                   <AccordionPanel pb={4}>
                     <VStack>
-                      <TableContainer w={"100%"}>
-                        <Table variant="simple">
-                          <Thead>
-                            <Tr>
-                              <Th>Spieler</Th>
-                              <Th>Zeitpunkt</Th>
-                              <Th isNumeric>Punkte</Th>
-                              <Th isNumeric>Zeit</Th>
-                            </Tr>
-                          </Thead>
-                          <Tbody>
-                            {highscore.map((highscore) => {
-                              return (<>
-                              {highscore.playerId === app.currentUser.id? 
-                                <Tr >
-                                  <Td><b>{highscore.nickname}</b></Td>
-                                  <Td fontSize={"sm"}><b>{unixToReadableDate(highscore.endTime)}</b></Td>
-                                  <Td isNumeric><b>{highscore.points}</b></Td>
-                                  <Td isNumeric><b>{highscore.playedTime} s</b></Td>
-                                </Tr> : 
-                                <Tr>
-                                <Td>{highscore.nickname}</Td>
-                                <Td fontSize={"sm"}>{unixToReadableDate(highscore.endTime)}</Td>
-                                <Td isNumeric>{highscore.points}</Td>
-                                <Td isNumeric>{highscore.playedTime} s</Td>
-                              </Tr>}
-                              
-                              </>
-                                
-                              );
-                            })}
-                          </Tbody>
-                        </Table>
-                      </TableContainer>
+                      <HighscoreTable quizId={location.state.quizId}/>
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>
