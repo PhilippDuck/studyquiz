@@ -14,7 +14,7 @@ import {
   Center,
   Avatar,
   Flex,
-  Box
+  Box,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRealm } from "../provider/RealmProvider";
@@ -29,6 +29,9 @@ function HighscoreTable(props) {
     getHighscoreByQuizId(props.quizId);
   }, [props.quizId]);
 
+  useEffect(() => {
+    getHighscoreByQuizId(props.quizId);
+  }, []);
 
   async function getHighscoreByQuizId(quizId) {
     setIsLoading(true);
@@ -44,49 +47,52 @@ function HighscoreTable(props) {
     return result;
   }
 
-  return (<>
-    <TableContainer w={"100%"}>
-      <Table variant="simple">
-        <Thead>
-          <Tr>
-            <Th>Spieler</Th>
-            <Th>Zeitpunkt</Th>
-            <Th isNumeric>Punkte</Th>
-            <Th isNumeric>Zeit</Th>
-          </Tr>
-        </Thead>
-        
-          <Tbody>
+  return (
+    <>
+      <TableContainer w={"100%"}>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Spieler</Th>
+              <Th>Zeitpunkt</Th>
+              <Th isNumeric>Punkte</Th>
+              <Th isNumeric>Zeit</Th>
+            </Tr>
+          </Thead>
 
+          <Tbody>
             {highscores.map((highscore) => {
               return (
-           
-              
-                  
-                    <Tr fontWeight={highscore.playerId === app.currentUser.id ? "bold": ""} key={highscore._id.toString()} >
-                      <Td>
-                        <Flex gap={2}>
-                        <Avatar size={"sm"} name={highscore.nickname} /><Center>{highscore.nickname}</Center></Flex>
-                        </Td>
-                      <Td fontSize={"sm"}>
-                        <DateAndTime timestamp={highscore.endTime}/>
-                      </Td>
-                      <Td isNumeric>
-                        {highscore.points}
-                      </Td>
-                      <Td isNumeric>
-                        {highscore.playedTime} s
-                      </Td>
-                    </Tr>
-                 
-             
+                <Tr
+                  fontWeight={
+                    highscore.playerId === app.currentUser.id ? "bold" : ""
+                  }
+                  key={highscore._id.toString()}
+                >
+                  <Td>
+                    <Flex gap={2}>
+                      <Avatar size={"sm"} name={highscore.nickname} />
+                      <Center>{highscore.nickname}</Center>
+                    </Flex>
+                  </Td>
+                  <Td fontSize={"sm"}>
+                    <DateAndTime timestamp={highscore.endTime} />
+                  </Td>
+                  <Td isNumeric>{highscore.points}</Td>
+                  <Td isNumeric>{highscore.playedTime} s</Td>
+                </Tr>
               );
             })}
           </Tbody>
-        
-      </Table>
-    </TableContainer>
-    {isLoading? <Center mt={4}><Spinner size={"xl"}/></Center>: ""}
+        </Table>
+      </TableContainer>
+      {isLoading ? (
+        <Center mt={4}>
+          <Spinner size={"xl"} />
+        </Center>
+      ) : (
+        ""
+      )}
     </>
   );
 }
