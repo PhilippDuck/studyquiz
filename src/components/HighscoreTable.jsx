@@ -29,9 +29,12 @@ function HighscoreTable(props) {
     getHighscoreByQuizId(props.quizId);
   }, [props.quizId]);
 
+//TODO: Bugfix Tabellenaktualisierung
   useEffect(() => {
     getHighscoreByQuizId(props.quizId);
-  }, []);
+  }, [props.quizIsDone]);
+
+
 
   async function getHighscoreByQuizId(quizId) {
     setIsLoading(true);

@@ -163,7 +163,7 @@ function Play() {
 
                   <AccordionPanel pb={4}>
                     <VStack>
-                      <HighscoreTable quizId={location.state.quizId}/>
+                      <HighscoreTable quizIsDone={quizIsDone} quizId={location.state.quizId}/>
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>
