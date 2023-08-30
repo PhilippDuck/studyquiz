@@ -15,7 +15,16 @@ import {
   Flex,
   Spacer,
   Spinner,
-  Container
+  Container,
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
 } from "@chakra-ui/react";
 import { useLocation } from "react-router-dom";
 import Question from "../components/Question";
@@ -35,7 +44,7 @@ function Play() {
   const [quizIsDone, setQuizIsDone] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const numberOfQuestions = questions.length;
-  const [lastPlayedQuizzes, setLastPlayedQuizzes] = useState([]);
+  const [highscore, setHighscore] = useState([]);
   const [isloadingLastQuizzes, setIsLoadingLastQuizzes] = useState(false);
 
   const [gameData, setGameData] = useState({
@@ -53,8 +62,12 @@ function Play() {
   }, [location.state]);
 
   useEffect(() => {
-    const points = numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1;
-    const relativePoints = ((100 /numberOfQuestions) * points) < 0 ? 0 : ((100 /numberOfQuestions) * points);
+    const points =
+      numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1;
+    const relativePoints =
+      (100 / numberOfQuestions) * points < 0
+        ? 0
+        : (100 / numberOfQuestions) * points;
     const newGamedata = {
       ...gameData,
       quizId: location.state.quizId,
@@ -73,14 +86,17 @@ function Play() {
     const result = await app.currentUser.functions.addPlayedQuiz(
       JSON.stringify(quizData)
     );
-
   }
 
-  async function getLastFivePlayedQuizzesByQuizId(quizId) {
+  async function getHighscoreByQuizId(quizId) {
     setIsLoadingLastQuizzes(true);
-    const result =
-      await app.currentUser.functions.getLastFivePlayedQuizzesByQuizId(quizId);
-    setLastPlayedQuizzes(result);
+    //console.log(quizId)
+    const result = await app.currentUser.functions.getHighscoreByQuizId(
+      quizId.toString(),
+      10
+    );
+    //console.log(result);
+    setHighscore(result);
 
     console.log(quizId.toString());
     console.log(result);
@@ -121,7 +137,7 @@ function Play() {
     console.log("repeat");
     setCurrentQuestion(0);
     setQuizIsDone(false);
-    setLastPlayedQuizzes([])
+    setHighscore([]);
     setGameData({
       ...gameData,
       mistakes: 0,
@@ -156,18 +172,20 @@ function Play() {
             />
 
             <Box w="100%" mb={"20px"}>
-
-              <Accordion onChange={(indices) => {
-                // Überprüfen, ob das AccordionItem geöffnet ist (Index 0 in diesem Fall)
-                if (indices.includes(0) && lastPlayedQuizzes.length === 0) {
-                  getLastFivePlayedQuizzesByQuizId(location.state.quizId);
-                }
-              }} allowMultiple>
+              <Accordion
+                onChange={(indices) => {
+                  // Überprüfen, ob das AccordionItem geöffnet ist (Index 0 in diesem Fall)
+                  if (indices.includes(0) && highscore.length === 0) {
+                    getHighscoreByQuizId(location.state.quizId);
+                  }
+                }}
+                allowMultiple
+              >
                 <AccordionItem border="none">
-                  <AccordionButton >
+                  <AccordionButton>
                     <Flex w="100%">
-
-                      <Heading size={"md"}>Zuletzt gespielt:</Heading>{isloadingLastQuizzes?<Spinner/>:""}
+                      <Heading size={"md"}>Bestenliste:</Heading>
+                      {isloadingLastQuizzes ? <Spinner /> : ""}
 
                       <Spacer></Spacer>
                       <AccordionIcon />
@@ -175,18 +193,39 @@ function Play() {
                   </AccordionButton>
 
                   <AccordionPanel pb={4}>
-                
                     <VStack>
-                      {lastPlayedQuizzes.map((playedQuiz) => {
-                        return (
-                          <PlayedQuizCard
-                            key={playedQuiz._id}
-                            playedQuiz={playedQuiz}
-                          />
-                        );
-                      })}
-
-                    </VStack> 
+                      <TableContainer w={"100%"}>
+                        <Table variant="simple">
+                          <Thead>
+                            <Tr>
+                              <Th>Spieler</Th>
+                              <Th isNumeric>Punkte</Th>
+                              <Th isNumeric>Zeit</Th>
+                            </Tr>
+                          </Thead>
+                          <Tbody>
+                            {highscore.map((highscore) => {
+                              return (<>
+                              {highscore.playerId === app.currentUser.id? 
+                                <Tr >
+                                  <Td><b>{highscore.nickname}</b></Td>
+                                  <Td isNumeric><b>{highscore.points}</b></Td>
+                                  <Td isNumeric><b>{highscore.playedTime} s</b></Td>
+                                </Tr> : 
+                                <Tr>
+                                <Td>{highscore.nickname}</Td>
+                                <Td isNumeric>{highscore.points}</Td>
+                                <Td isNumeric>{highscore.playedTime} s</Td>
+                              </Tr>}
+                              
+                              </>
+                                
+                              );
+                            })}
+                          </Tbody>
+                        </Table>
+                      </TableContainer>
+                    </VStack>
                   </AccordionPanel>
                 </AccordionItem>
               </Accordion>
@@ -200,7 +239,6 @@ function Play() {
             questions={questions}
             currentQuestion={currentQuestion}
             handleHintUsed={handleHintUsed}
-
           />
         )
       )}
