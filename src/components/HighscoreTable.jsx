@@ -13,7 +13,8 @@ import {
   Spinner,
   Center,
   Avatar,
-  Flex
+  Flex,
+  Box
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { useRealm } from "../provider/RealmProvider";
@@ -28,6 +29,7 @@ function HighscoreTable(props) {
     getHighscoreByQuizId(props.quizId);
   }, [props.quizId]);
 
+
   async function getHighscoreByQuizId(quizId) {
     setIsLoading(true);
     //console.log(quizId)
@@ -38,8 +40,6 @@ function HighscoreTable(props) {
     //console.log(result);
     setHighscores(result);
 
-    console.log(quizId.toString());
-    console.log(result);
     setIsLoading(false);
     return result;
   }
@@ -61,38 +61,25 @@ function HighscoreTable(props) {
             {highscores.map((highscore) => {
               return (
            
-                <>
-                  {highscore.playerId === app.currentUser.id ? (
-                    <Tr>
+              
+                  
+                    <Tr fontWeight={highscore.playerId === app.currentUser.id ? "bold": ""} key={highscore._id.toString()} >
                       <Td>
                         <Flex gap={2}>
                         <Avatar size={"sm"} name={highscore.nickname} /><Center>{highscore.nickname}</Center></Flex>
                         </Td>
                       <Td fontSize={"sm"}>
-                        <b><DateAndTime timestamp={highscore.endTime}/></b>
+                        <DateAndTime timestamp={highscore.endTime}/>
                       </Td>
                       <Td isNumeric>
-                        <b>{highscore.points}</b>
+                        {highscore.points}
                       </Td>
                       <Td isNumeric>
-                        <b>{highscore.playedTime} s</b>
+                        {highscore.playedTime} s
                       </Td>
                     </Tr>
-                  ) : (
-                    <Tr>
-                        
-                      <Td>
-                        <Flex gap={2}>
-                        <Avatar size={"sm"} name={highscore.nickname} /><Center>{highscore.nickname}</Center></Flex>
-                        </Td>
-                      <Td fontSize={"sm"}>
-                      <DateAndTime timestamp={highscore.endTime}/>
-                      </Td>
-                      <Td isNumeric>{highscore.points}</Td>
-                      <Td isNumeric>{highscore.playedTime} s</Td>
-                    </Tr>
-                  )}
-                </>
+                 
+             
               );
             })}
           </Tbody>
