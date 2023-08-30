@@ -88,6 +88,17 @@ function Play() {
     );
   }
 
+  function unixToReadableDate(unixTimestamp) {
+    // Erstellt ein neues Date-Objekt basierend auf dem Unix-Timestamp (multipliziert mit 1000, da JavaScript Millisekunden erwartet)
+    const date = new Date(unixTimestamp);
+
+    // Formatierung des Datums und der Uhrzeit
+    const formattedDate = date.toLocaleDateString(); // z.B. "26.08.2023"
+    const formattedTime = date.toLocaleTimeString(); // z.B. "12:34:56"
+
+    return `${formattedDate} ${formattedTime}`;
+  }
+
   async function getHighscoreByQuizId(quizId) {
     setIsLoadingLastQuizzes(true);
     //console.log(quizId)
@@ -199,6 +210,7 @@ function Play() {
                           <Thead>
                             <Tr>
                               <Th>Spieler</Th>
+                              <Th>Zeitpunkt</Th>
                               <Th isNumeric>Punkte</Th>
                               <Th isNumeric>Zeit</Th>
                             </Tr>
@@ -209,11 +221,13 @@ function Play() {
                               {highscore.playerId === app.currentUser.id? 
                                 <Tr >
                                   <Td><b>{highscore.nickname}</b></Td>
+                                  <Td fontSize={"sm"}><b>{unixToReadableDate(highscore.endTime)}</b></Td>
                                   <Td isNumeric><b>{highscore.points}</b></Td>
                                   <Td isNumeric><b>{highscore.playedTime} s</b></Td>
                                 </Tr> : 
                                 <Tr>
                                 <Td>{highscore.nickname}</Td>
+                                <Td fontSize={"sm"}>{unixToReadableDate(highscore.endTime)}</Td>
                                 <Td isNumeric>{highscore.points}</Td>
                                 <Td isNumeric>{highscore.playedTime} s</Td>
                               </Tr>}
