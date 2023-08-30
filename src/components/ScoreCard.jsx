@@ -31,7 +31,7 @@ function ScoreCard(props) {
           <Heading>Quiz beendet!</Heading>
           <Circle border={"2px"} size={40}>
             <Heading size={"4xl"}>
-              {props.gameData.points}
+              {Number(props.gameData.points)}
             </Heading>
           </Circle>
 

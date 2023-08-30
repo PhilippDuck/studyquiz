@@ -112,7 +112,6 @@ function Play() {
     console.log("repeat");
     setCurrentQuestion(0);
     setQuizIsDone(false);
-    setHighscore([]);
     setGameData({
       ...gameData,
       mistakes: 0,
