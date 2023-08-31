@@ -23,7 +23,7 @@ function Highscores() {
   }, []);
 
   return (
-    <Container>
+    <Container maxW={"2xl"}>
       <Select
         id="quiz"
         name="quiz"

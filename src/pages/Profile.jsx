@@ -41,7 +41,7 @@ function Profile() {
 
 
     return (
-        <Container>
+        <Container maxW={"2xl"}>
             <Heading>Profil</Heading>
             <Center>
                 <VStack spacing={"20px"}>

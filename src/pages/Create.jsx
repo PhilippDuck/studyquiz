@@ -139,7 +139,7 @@ function Create() {
   }
 
   return (
-    <Container>
+    <Container maxW={"2xl"}>
       <Flex>
         <Heading>Spiel erstellen</Heading>
         <Spacer></Spacer>

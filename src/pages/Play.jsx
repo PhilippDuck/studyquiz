@@ -123,7 +123,7 @@ function Play() {
     });
   }
   return (
-    <Container>
+    <Container maxW={"2xl"}>
       <Center>
         <Text>{currentQuestion + " / " + numberOfQuestions}</Text>
       </Center>
