@@ -118,7 +118,8 @@ function Root() {
           </Center>
           <Center flex={1}>
             <Link to={`/`}>
-              <Box w="17em">
+          
+              <Box w={isLargerScreen || isNotSmallerScreen ? "230px": "120px"}>
                 {colorMode === "light" ? (
                   <Image
                     src="/StudyQuit_Banner_Schwarz_Transparent.png"
