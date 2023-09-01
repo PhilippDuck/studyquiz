@@ -38,6 +38,7 @@ function Play() {
   const numberOfQuestions = questions.length;
 
 
+
   const [gameData, setGameData] = useState({
     startTime: Date.now(),
     endTime: 0,
@@ -52,7 +53,7 @@ function Play() {
     }
   }, [location.state]);
 
-  useEffect(() => {
+  useEffect( () => {
     const points =
       numberOfQuestions - gameData.mistakes - gameData.usedHints * 0.1;
     const relativePoints =
@@ -68,7 +69,7 @@ function Play() {
       points: relativePoints,
     };
     if (quizIsDone) {
-      addPlayedQuiz(newGamedata);
+        addPlayedQuiz(newGamedata);
     }
     setGameData(newGamedata);
   }, [quizIsDone]);
@@ -77,6 +78,23 @@ function Play() {
     const result = await app.currentUser.functions.addPlayedQuiz(
       JSON.stringify(quizData)
     );
+  }
+
+  const [highscores, setHighscores] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function getHighscoreByQuizId(quizId) {
+    setIsLoading(true);
+    //console.log(quizId)
+    const result = await app.currentUser.functions.getHighscoreByQuizId(
+      quizId.toString(),
+      10
+    );
+    //console.log(result);
+    setHighscores(result);
+
+    setIsLoading(false);
+    return result;
   }
 
   function checkAnswer(answer) {
@@ -147,7 +165,7 @@ function Play() {
 
             <Box w="100%" mb={"20px"}>
               <Accordion
-                
+                onChange={() => {getHighscoreByQuizId(location.state.quizId)}}
                 allowMultiple
               >
                 <AccordionItem border="none">
@@ -163,7 +181,7 @@ function Play() {
 
                   <AccordionPanel pb={4}>
                     <VStack>
-                      <HighscoreTable quizIsDone={quizIsDone} quizId={location.state.quizId}/>
+                      <HighscoreTable quizIsDone={quizIsDone} isLoading={isLoading} highscores={highscores}/>
                     </VStack>
                   </AccordionPanel>
                 </AccordionItem>

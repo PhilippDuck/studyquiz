@@ -22,6 +22,27 @@ function Highscores() {
     getQuizzes();
   }, []);
 
+  useEffect(() => {
+    getHighscoreByQuizId(selectedQuiz);
+  }, [selectedQuiz])
+
+  const [highscores, setHighscores] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function getHighscoreByQuizId(quizId) {
+    setIsLoading(true);
+    //console.log(quizId)
+    const result = await app.currentUser.functions.getHighscoreByQuizId(
+      quizId.toString(),
+      10
+    );
+    //console.log(result);
+    setHighscores(result);
+
+    setIsLoading(false);
+    return result;
+  }
+
   return (
     <Container maxW={"2xl"}>
       <Select
@@ -39,7 +60,7 @@ function Highscores() {
         ))}
       </Select>
       <Box h={"30px"} />
-      <HighscoreTable quizId={selectedQuiz} />
+      <HighscoreTable highscores={highscores} isLoading={isLoading} />
     </Container>
   );
 }

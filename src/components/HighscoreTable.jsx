@@ -21,34 +21,10 @@ import { useRealm } from "../provider/RealmProvider";
 import DateAndTime from "./DateAndTime";
 
 function HighscoreTable(props) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [highscores, setHighscores] = useState([]);
+ 
+  
   const app = useRealm();
 
-  useEffect(() => {
-    getHighscoreByQuizId(props.quizId);
-  }, [props.quizId]);
-
-//TODO: Bugfix Tabellenaktualisierung
-  useEffect(() => {
-    getHighscoreByQuizId(props.quizId);
-  }, [props.quizIsDone]);
-
-
-
-  async function getHighscoreByQuizId(quizId) {
-    setIsLoading(true);
-    //console.log(quizId)
-    const result = await app.currentUser.functions.getHighscoreByQuizId(
-      quizId.toString(),
-      10
-    );
-    //console.log(result);
-    setHighscores(result);
-
-    setIsLoading(false);
-    return result;
-  }
 
   return (
     <>
@@ -64,7 +40,7 @@ function HighscoreTable(props) {
           </Thead>
 
           <Tbody>
-            {highscores.map((highscore) => {
+            {props.highscores.map((highscore) => {
               return (
                 <Tr
                   fontWeight={
@@ -89,7 +65,7 @@ function HighscoreTable(props) {
           </Tbody>
         </Table>
       </TableContainer>
-      {isLoading ? (
+      {props.isLoading ? (
         <Center mt={4}>
           <Spinner size={"xl"} />
         </Center>
