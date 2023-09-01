@@ -8,7 +8,8 @@ import {
   AlertDialogOverlay,
   AlertDialogCloseButton,
   useDisclosure,
-  Spinner
+  Spinner,
+  Badge
 } from '@chakra-ui/react'
 import { Link } from "react-router-dom";
 import { useRealm } from "../provider/RealmProvider";
@@ -48,6 +49,36 @@ function QuizCard(props) {
     onClose();
   }
 
+  function stringToColorPalette(inputString) {
+    // Eine Array von möglichen Farbpaletten
+    const colorPalettes = [
+
+      "gray",
+      "red",
+      "orange",
+      "yellow",
+      "green",
+      "teal",
+      "blue",
+      "cyan",
+      "purple",
+      "pink",
+
+    ];
+  
+    // Einen Hash-Wert für den Eingabestring generieren
+    let hash = 0;
+    for (let i = 0; i < inputString.length; i++) {
+      hash = inputString.charCodeAt(i) + ((hash << 5) - hash);
+    }
+  
+    // Einen Index basierend auf dem Hash-Wert auswählen
+    const index = Math.abs(hash) % colorPalettes.length;
+  
+    // Die ausgewählte Farbpalette zurückgeben
+    return colorPalettes[index];
+  }
+  
 
   return (
     <Box w="100%">
@@ -60,6 +91,7 @@ function QuizCard(props) {
 
                 <VStack spacing={"2px"} align={"start"} minW="100%">
 
+                  <Badge size={"sm"} colorScheme={stringToColorPalette(props.quiz.tag)}>{props.quiz.tag}</Badge> 
                   <Heading size="sm">{props.quiz.title}</Heading>
                   <Text fontSize={"sm"}>{props.quiz.questions.length + (props.quiz.questions.length === 1 ? " Frage" : " Fragen")}</Text>
                   <Text color="gray" fontSize={"xs"}>{`Ersteller: ${owner}`}</Text>

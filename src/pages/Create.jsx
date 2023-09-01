@@ -173,6 +173,19 @@ function Create() {
           />
         </FormControl>
       </Center>
+      <Box h="10px" />
+      <Center w="100%">
+        <FormControl isRequired>
+          <FormLabel>Thema:</FormLabel>
+          <Input 
+         
+            onChange={(e) => {
+              setNewQuiz({ ...newQuiz, tag: e.target.value });
+            }}
+            type="text"
+          />
+        </FormControl>
+      </Center>
       <Box h="20px"></Box>
       <Flex>
         <Heading size="lg">Fragen</Heading>
