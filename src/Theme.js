@@ -14,6 +14,10 @@ const theme = extendTheme({
           },
         }
       },
+      fonts: {
+        body: "Calibri, Arial, sans-serif", // Calibri als erste Wahl, gefolgt von Arial und dann einer generischen sans-serif Schriftart
+        heading: "Calibri, Arial, sans-serif", // Gleiches Prinzip für Überschriften
+      },
 });
 
 export default theme;
