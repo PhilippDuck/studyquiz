@@ -21,11 +21,12 @@ import {
   Spinner,
   HStack,
   Text,
+  Image,
 } from "@chakra-ui/react";
 import { ChevronDownIcon, MoonIcon, SunIcon } from "@chakra-ui/icons";
-import {HiChartBar} from "react-icons/hi2";
+import { HiChartBar } from "react-icons/hi2";
 import { LuGamepad2, LuUser } from "react-icons/lu";
-import {  Credentials } from "realm-web";
+import { Credentials } from "realm-web";
 import { useRealm } from "./provider/RealmProvider";
 
 function Root() {
@@ -69,7 +70,7 @@ function Root() {
 
   return (
     <>
-      <Box shadow="xs" w="100%" h="80px" p={4}>
+      <Box shadow="xs" w="100%" h="100px" p={4}>
         <Flex h="100%">
           <Center>
             <Box w="100px">
@@ -104,11 +105,11 @@ function Root() {
                   </Link>
 
                   <Link to={`profile/`}>
-                  <MenuItem>
-                    <HStack>
-                      <LuUser />
-                      <Text>Profil</Text>
-                    </HStack>
+                    <MenuItem>
+                      <HStack>
+                        <LuUser />
+                        <Text>Profil</Text>
+                      </HStack>
                     </MenuItem>
                   </Link>
                 </MenuList>
@@ -117,16 +118,30 @@ function Root() {
           </Center>
           <Center flex={1}>
             <Link to={`/`}>
-              <Heading>StudyQuiz</Heading>
+              <Box w="17em">
+                {colorMode === "light" ? (
+                  <Image
+                    src="/StudyQuit_Banner_Schwarz_Transparent.png"
+                    alt="StudyQuiz"
+                  />
+                ) : (
+                  <Image
+                    src="/StudyQuit_Banner_Weiss_Transparent.png"
+                    alt="StudyQuiz"
+                  />
+                )}
+              </Box>
             </Link>
           </Center>
           <Flex w="100px">
             <Spacer />
-            <IconButton
-              onClick={toggleColorMode}
-              aria-label="Darkmode umschalten"
-              icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
-            />
+            <Center>
+              <IconButton
+                onClick={toggleColorMode}
+                aria-label="Darkmode umschalten"
+                icon={colorMode === "light" ? <MoonIcon /> : <SunIcon />}
+              />
+            </Center>
           </Flex>
         </Flex>
       </Box>
